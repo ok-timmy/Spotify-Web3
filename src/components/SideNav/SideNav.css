@@ -1,0 +1,28 @@
+.sideBar {
+    color: white;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    flex: 4;
+    background-color: #000000;
+    padding: 1.75rem;
+    overflow-y: hidden;
+    max-height: 100vh;
+  }
+
+  .logo__div {
+    display: flex;
+    align-items: top;
+    margin-bottom: 20px;
+  }
+  
+  .logo {
+      width:2.8rem;
+      height: 2.8rem;
+      margin-right: 0.25rem;
+    }
+  
+    .logoName {
+      font-size: 1.75rem;
+      color: white;
+    }
