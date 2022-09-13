@@ -25,7 +25,7 @@ contract MusicStore {
         string title;
         string name;
         string category;
-        string Genre;
+        string genre;
         string[] tracks;
         string coverImage;
         uint releaseDate;
@@ -64,24 +64,25 @@ contract MusicStore {
     );
 
     function subscribe(
-        address user,
+        // address user,
         uint plan,
-        IERC20 _token,
+        // IERC20 _token,
         uint price
     ) public {
-        _token.transferFrom(msg.sender, address(this), price);
+        // _token.transferFrom(msg.sender, address(this), price);
         if (plan == 1) {
-            users[user].playableAlbums += 50;
+            users[msg.sender].playableAlbums += 50;
         }
         if (plan == 2) {
-            users[user].playableAlbums += 100;
+            users[msg.sender].playableAlbums += 100;
         }
         if (plan == 3) {
-            users[user].playableAlbums += 200;
+            users[msg.sender].playableAlbums += 200;
         }
-        _token.transferFrom(address(this), owner, price / 11);
+        // _token.transferFrom(address(this), owner, price / 11);
+        users[msg.sender].isSubscribed = true;
 
-        emit Subscribed(user, price, plan);
+        emit Subscribed(msg.sender, price, plan);
     }
 
     function play(uint _id) public returns (bool success) {
@@ -91,6 +92,10 @@ contract MusicStore {
         );
         albums[_id].noOfStreams += 1;
         users[albums[_id].author].amountEarned += 100000000000000000;
+        users[msg.sender].playableAlbums -= 1;
+        if (users[msg.sender].playableAlbums == 0) {
+            users[msg.sender].isSubscribed = false;
+        }
         emit Played(
             _id,
             albums[_id].author,
@@ -103,7 +108,7 @@ contract MusicStore {
     }
 
     function uploadAlbum(
-        address _author,
+        // address _author,
         string memory _title,
         string memory _name,
         string memory _category,
@@ -111,10 +116,10 @@ contract MusicStore {
         string[] memory _tracks,
         string memory _coverImage,
         uint _releaseDate
-    ) public {
+    ) public payable {
         albumCount++;
         albums[albumCount] = Collection(
-            _author,
+            msg.sender,
             albumCount,
             _title,
             _name,
@@ -128,7 +133,7 @@ contract MusicStore {
         );
 
         emit Uploaded(
-            _author,
+            msg.sender,
             _title,
             _name,
             _category,
@@ -214,7 +219,7 @@ contract MusicStore {
     //   to my wallet
     //5. - Uploading playlist should be in this format
     // - {
-    //     title, name, Category(Album/Playlist), Genre(hip-hop, gospel, R&B, Jazz, Rap, Soul, Country Music, Electronic, Blues, Afro, Mixed ), Songs(- Should be an array
+    //     title, name, Category(Album/Playlist), genre(hip-hop, gospel, R&B, Jazz, Rap, Soul, Country Music, Electronic, Blues, Afro, Mixed ), Songs(- Should be an array
     //     - Should only accept .mp3, .aac), Album/Playlist cover image, Author of playlist/ Album, Release date, Rating, number of Plays,
     // - }
 
