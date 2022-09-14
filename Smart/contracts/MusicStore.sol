@@ -18,6 +18,7 @@ contract MusicStore {
     mapping(address => User) public users;
     mapping(uint => Collection) public albums;
     mapping (uint=> uint[]) public ratings;
+    Collection [] public albumsList;
 
     struct Collection {
         address author;
@@ -63,6 +64,8 @@ contract MusicStore {
         uint noOfStreams
     );
 
+    event Withdrawn(uint amount, address user, uint balance);
+
     function subscribe(
         // address user,
         uint plan,
@@ -88,14 +91,10 @@ contract MusicStore {
     function play(uint _id) public returns (bool success) {
         require(
             users[msg.sender].playableAlbums > 0,
-            "You Do Not have enough Subscription to play album, Please Subscribe"
+            "You Do Not have an active subscription to play album, Please Subscribe"
         );
         albums[_id].noOfStreams += 1;
         users[albums[_id].author].amountEarned += 100000000000000000;
-        users[msg.sender].playableAlbums -= 1;
-        if (users[msg.sender].playableAlbums == 0) {
-            users[msg.sender].isSubscribed = false;
-        }
         emit Played(
             _id,
             albums[_id].author,
@@ -104,6 +103,11 @@ contract MusicStore {
             albums[_id].releaseDate,
             albums[_id].noOfStreams
         );
+        users[msg.sender].playableAlbums -= 1;
+        if (users[msg.sender].playableAlbums == 0) {
+            // users[msg.sender].playableAlbums -= 1;
+            users[msg.sender].isSubscribed = false;
+        }
         return true;
     }
 
@@ -131,6 +135,19 @@ contract MusicStore {
             0,
             0
         );
+        albumsList.push(Collection(
+            msg.sender,
+          albumCount,
+           _title,
+             _name,
+           _category,
+            _genre,
+            _tracks,
+            _coverImage,
+           _releaseDate,
+            0,
+            0
+        ));
 
         emit Uploaded(
             msg.sender,
@@ -145,16 +162,21 @@ contract MusicStore {
     }
 
     function withdraw(
-        address _user,
-        IERC20 _token,
+        // IERC20 _token,
         uint _amount
     ) public payable {
         require(
-            users[_user].amountEarned > 0,
+            users[msg.sender].amountEarned > 0,
             "You Do not have enough balance to withdraw from"
         );
-        _token.transferFrom(address(this), _user, _amount);
-        users[_user].amountEarned -= _amount;
+        require(users[msg.sender].amountEarned> _amount, "Insuficient Balance");
+        // _token.transferFrom(address(this), _user, _amount);
+        users[msg.sender].amountEarned -= _amount;
+        emit Withdrawn(_amount, msg.sender, users[msg.sender].amountEarned);
+    }
+
+    function getAllAlbums() public view returns ( Collection[] memory) {
+        return albumsList;
     }
 
     function rateAlbum(uint _albumId, address _user, uint _rating) public {
