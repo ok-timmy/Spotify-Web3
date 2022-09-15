@@ -37,8 +37,8 @@ contract MusicStore {
     struct User {
         bool isSubscribed;
         uint playableAlbums;
-        string[] playedAlbums;
-        string[] uploadedAlbums;
+        // string[] playedAlbums;
+        Collection [] uploadedAlbums;
         uint[] likedAlbums;
         uint[] ratedAlbums;
         uint amountEarned;
@@ -148,6 +148,19 @@ contract MusicStore {
             0,
             0
         ));
+        users[msg.sender].uploadedAlbums.push(Collection(
+            msg.sender,
+          albumCount,
+           _title,
+             _name,
+           _category,
+            _genre,
+            _tracks,
+            _coverImage,
+           _releaseDate,
+            0,
+            0
+        ));
 
         emit Uploaded(
             msg.sender,
@@ -177,6 +190,10 @@ contract MusicStore {
 
     function getAllAlbums() public view returns ( Collection[] memory) {
         return albumsList;
+    }
+
+    function getUserUploads(address _user)public view returns (Collection []memory) {
+        return users[_user].uploadedAlbums;
     }
 
     function rateAlbum(uint _albumId, address _user, uint _rating) public {

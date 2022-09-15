@@ -12,7 +12,7 @@
 - Uploading playlist should be in this format
 - {
     title, name, Category(Album/Playlist), Genre(hip-hop, gospel, R&B, Jazz, Rap, Soul, Country Music, Electronic, Blues, Afro, Mixed ), Songs(- Should be an array
-    - Should only accept .mp3, .aac), Album/Playlist cover image, Author of playlist/ Album, Release date, Rating 
+    Should only accept .mp3, .aac), Album/Playlist cover image, Author of playlist/ Album, Release date, Rating
 - }
 
 - For Frontend
@@ -20,4 +20,3 @@
 - You should be able to able to upload albums/playlist
 - You should be able to search for an album/playlist
 - You should be able to add it to your list of favourite albums/Playlist
-- 
