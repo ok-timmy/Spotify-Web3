@@ -67,7 +67,6 @@ contract MusicStore {
     event Withdrawn(uint amount, address user, uint balance);
 
     function subscribe(
-        // address user,
         uint plan,
         // IERC20 _token,
         uint price
@@ -105,7 +104,6 @@ contract MusicStore {
         );
         users[msg.sender].playableAlbums -= 1;
         if (users[msg.sender].playableAlbums == 0) {
-            // users[msg.sender].playableAlbums -= 1;
             users[msg.sender].isSubscribed = false;
         }
         return true;
@@ -122,7 +120,7 @@ contract MusicStore {
         uint _releaseDate
     ) public payable {
         albumCount++;
-        albums[albumCount] = Collection(
+        Collection memory newCollection = Collection(
             msg.sender,
             albumCount,
             _title,
@@ -135,32 +133,9 @@ contract MusicStore {
             0,
             0
         );
-        albumsList.push(Collection(
-            msg.sender,
-          albumCount,
-           _title,
-             _name,
-           _category,
-            _genre,
-            _tracks,
-            _coverImage,
-           _releaseDate,
-            0,
-            0
-        ));
-        users[msg.sender].uploadedAlbums.push(Collection(
-            msg.sender,
-          albumCount,
-           _title,
-             _name,
-           _category,
-            _genre,
-            _tracks,
-            _coverImage,
-           _releaseDate,
-            0,
-            0
-        ));
+        albums[albumCount] = newCollection;
+        albumsList.push(newCollection);
+        users[msg.sender].uploadedAlbums.push(newCollection);
 
         emit Uploaded(
             msg.sender,
