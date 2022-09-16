@@ -37,6 +37,31 @@ export const SpotifyProvider = ({ children }) => {
   };
 
   //Function to Upload Album
+  const uploadAlbum = async() => {
+    await Contract.setProvider(
+      "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
+
+    );
+    const musicStoreContract = await new web3.eth.Contract(
+      musicStoreABI,
+      // "0xA844156Ba166535dD3ab29cA0fB93Ab48Dd6b953"
+      "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
+    );
+
+    const allAlbums = musicStoreContract.methods
+    .uploadAlbum(
+      "First Album",
+      "Sungba",
+      "Album",
+      "Hip-Hop",
+      ["Track 1", "Track 2", "Track 3", "Track 4", "Track 5"],
+      "Cover_Image.png",
+      200000000
+    ).send({from: currentAccount}, (err, result)=> {
+      if(err){console.log(err)} console.log(result);
+    });
+    console.log(allAlbums);
+  }
 
   //Function to get the User details of the connected account
   const getUserDetails = async () => {
@@ -46,8 +71,8 @@ export const SpotifyProvider = ({ children }) => {
     );
     const musicStoreContract = await new web3.eth.Contract(
       musicStoreABI,
-      // "0x9149Ecf746684D414C6c012434305C6B8A4cea0d"
-      "0x48C9d10460f7daa118C08d675515aC2ADE06534e"
+      // "0xA844156Ba166535dD3ab29cA0fB93Ab48Dd6b953"
+      "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
     );
     // console.log(musicStoreContract.methods);
     const userDetails = await musicStoreContract.methods
@@ -70,8 +95,8 @@ export const SpotifyProvider = ({ children }) => {
     );
     const musicStoreContract = await new web3.eth.Contract(
       musicStoreABI,
-      // "0x9149Ecf746684D414C6c012434305C6B8A4cea0d"
-      "0x48C9d10460f7daa118C08d675515aC2ADE06534e"
+      // "0xA844156Ba166535dD3ab29cA0fB93Ab48Dd6b953"
+      "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
     );
 
     const allAlbums = await musicStoreContract.methods
@@ -88,12 +113,16 @@ export const SpotifyProvider = ({ children }) => {
     );
     const musicStoreContract = await new web3.eth.Contract(
       musicStoreABI,
-      // "0x9149Ecf746684D414C6c012434305C6B8A4cea0d"
-      "0x48C9d10460f7daa118C08d675515aC2ADE06534e"
+      // "0xA844156Ba166535dD3ab29cA0fB93Ab48Dd6b953"
+      "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
     );
 
     const allAlbums = await musicStoreContract.methods
-    .subscribe(2, currentAccount, toWei("100000000000000000")).call();
+    .subscribe(2, currentAccount, toWei("100000000000000000")).send({from: currentAccount}, (err, result)=> {
+      if(err){
+        console.log(err) 
+      } console.log(result)
+    });
     console.log(allAlbums);
   }
 
@@ -115,6 +144,7 @@ export const SpotifyProvider = ({ children }) => {
         getUserDetails,
         getAllAlbums,
         userSubscribe,
+        uploadAlbum,
       }}
     >
       {children}{" "}

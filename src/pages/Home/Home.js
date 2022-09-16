@@ -7,10 +7,10 @@ import { SpotifyContext } from "../../Context/SpotifyContext";
 
 
 const Home = () => {
-  const {getUserDetails, getAllAlbums, userSubscribe} = useContext(SpotifyContext)
+  const {getUserDetails, getAllAlbums, userSubscribe, uploadAlbum} = useContext(SpotifyContext)
   return (
     <>
-    <button className="bg-white text-black ml-4 px-3 py-3" onClick={ getUserDetails}>Get User Details</button>
+    <button className="bg-white text-black ml-4 px-3 py-3" onClick={getUserDetails}>Get User Details</button>
       <div className="mt-2 px-6 pt-6">
         <div className="flex justify-between">
           <h2 className="text-white text-2xl"> Spotify Playlists</h2> 

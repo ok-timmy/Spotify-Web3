@@ -73,21 +73,33 @@ contract MusicStore {
         // IERC20 _token,
         uint price
     ) public returns(bool success) {
+        User storage user = users[_user];
         // _token.transferFrom(msg.sender, address(this), price);
         if (plan == 1) {
-            users[_user].playableAlbums += 50;
-        }
-        if (plan == 2) {
-            users[_user].playableAlbums += 100;
-        }
-        if (plan == 3) {
-            users[_user].playableAlbums += 200;
-        }
-        // _token.transferFrom(address(this), owner, price / 11);
-        users[_user].isSubscribed = true;
+            user.playableAlbums += 50;
+            // _token.transferFrom(address(this), owner, price / 11);
+        user.isSubscribed = true;
 
         emit Subscribed(_user, price, plan);
         return true;
+        }
+        if (plan == 2) {
+            user.playableAlbums += 100;
+            // _token.transferFrom(address(this), owner, price / 11);
+            user.isSubscribed = true;
+    
+            emit Subscribed(_user, price, plan);
+            return true;
+        }
+        if (plan == 3) {
+            user.playableAlbums += 200;
+            // _token.transferFrom(address(this), owner, price / 11);
+            user.isSubscribed = true;
+    
+            emit Subscribed(_user, price, plan);
+            return true;
+        }
+        
     }
 
     function play(uint _id) public returns (bool success) {

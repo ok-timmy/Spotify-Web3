@@ -156,7 +156,7 @@ describe("Should Deploy the Contract", () => {
 
     // Test for Subscribe function for User 1
     it("Test For Subscribe Function for user 1", async () => {
-      expect(await musicStore.connect(user1).subscribe(1, toWei(2)))
+      expect(await musicStore.connect(user1).subscribe(1, user1.address, toWei(2)))
         .emit("Subscribed")
         .withArgs(user1, toWei(2), 1);
 
@@ -170,7 +170,7 @@ describe("Should Deploy the Contract", () => {
     });
     // Test for Subscribe function for User 2
     it("Test For Subscribe Function for user 2", async () => {
-      expect(await musicStore.connect(user2).subscribe(2, toWei(4)))
+      expect(await musicStore.connect(user2).subscribe(2, user2.address, toWei(4)))
         .emit("Subscribed")
         .withArgs(user2, toWei(4), 2);
 
@@ -182,7 +182,7 @@ describe("Should Deploy the Contract", () => {
     });
     // Test for Subscribe function for User 3
     it("Test For Subscribe Function for user 3", async () => {
-      expect(await musicStore.connect(user3).subscribe(3, toWei(6)))
+      expect(await musicStore.connect(user3).subscribe(3, user3.address, toWei(6)))
         .emit("Subscribed")
         .withArgs(user3, toWei(6), 3);
 
@@ -258,9 +258,11 @@ describe("Should Deploy the Contract", () => {
         const worksByUserOne = await musicStore.getUserUploads(user1.address);
         // console.log("Works published by User 1", worksByUserOne);
 
-        await musicStore.connect(user1).subscribe(1, toWei(2))
-        await musicStore.connect(user2).subscribe(2, toWei(4));
-        await musicStore.connect(user3).subscribe(3, toWei(6))
+        await musicStore.connect(user1).subscribe(1, user1.address, toWei(2))
+        await musicStore.connect(user2).subscribe(2, user2.address, toWei(4));
+        const data2 = await musicStore.getUserDetails(user2.address);
+        console.log(data2, "User2 Data and Details after subscribing");
+        await musicStore.connect(user3).subscribe(3, user3.address, toWei(6))
 
       
       //Test to see if the user can play as much as possible albums as they like
