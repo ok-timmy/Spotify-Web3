@@ -6,7 +6,7 @@ const AlbumCard = () => {
 
   const handleHover = () => {
     setHover(!hover);
-    console.log(hover)
+    // console.log(hover)
   }
 
   return (

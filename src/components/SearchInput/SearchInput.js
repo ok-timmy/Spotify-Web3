@@ -4,7 +4,7 @@ import React from 'react'
 const SearchInput = () => {
   return (
     <form className="flex items-center max-w-full">   
-    <label for="simple-search" class="sr-only">Search</label>
+    <label htmlFor="simple-search" className="sr-only">Search</label>
     <div className="relative w-[20rem]">
         <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
             <SearchOutlined style={{color: "black", fontSize:"1.25rem"}}/>

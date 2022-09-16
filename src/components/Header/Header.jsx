@@ -1,11 +1,14 @@
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import React from "react";
+import React, { useContext } from "react";
 import { useLocation } from "react-router-dom";
+import { SpotifyContext } from "../../Context/SpotifyContext";
 import SearchInput from "../SearchInput/SearchInput";
 
 const Header = () => {
+  const {connectWallet, currentAccount} = useContext(SpotifyContext)
   const location = useLocation();
-  console.log(location.pathname);
+  // console.log(location.pathname);
+  console.log(currentAccount);
 
   return (
     <div className=" sticky bg-[#101010]  top-0 right-0 left-0 z-50">
@@ -52,8 +55,8 @@ const Header = () => {
             <div className="h-8 border-l place-content-center border-gray-50 py-1 px-3"></div>
           </div>
           <div className="align-middle ">
-            <button className="text-black bg-[#F6F6F6] px-8 rounded-3xl py-3 font-semibold text-lg">
-              Connect Wallet
+            <button className="text-black bg-[#F6F6F6] px-8 rounded-3xl py-3 font-semibold text-lg" onClick={connectWallet}>
+              {currentAccount? `${currentAccount.slice(0,5)}....${currentAccount.slice(36)}` :"Connect Wallet"}
             </button>
           </div>
         </div>

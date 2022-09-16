@@ -16,11 +16,11 @@ describe("Should Deploy the Contract", () => {
   describe("Confirms Contract Address", () => {
     it("Contracts deploys properly", async () => {
       console.log(`Music Store Contract is deployed to ${musicStore.address}`);
-      //   console.log(deployer.address, "Deployer");
-      //   console.log(user1.address, "User 1");
-      //   console.log(user2.address, "User 2");
-      //   console.log(user3.address, "User 3");
-      //   console.log(user4.address, "User 4");
+        console.log(deployer.address, "Deployer");
+        console.log(user1.address, "User 1");
+        console.log(user2.address, "User 2");
+        console.log(user3.address, "User 3");
+        console.log(user4.address, "User 4");
     });
 
     // Test For Album/Playlist creation with User 1
@@ -195,6 +195,9 @@ describe("Should Deploy the Contract", () => {
 
     //Test to see if Users Can Play an Album
     it("Check if users have the authority to play an album", async () => {
+          
+     const data = await musicStore.getUserDetails(user2.address);
+      console.log(data, "User2 Data and Details");
       //Upload album 1
       await musicStore
         .connect(user1)
@@ -274,9 +277,7 @@ describe("Should Deploy the Contract", () => {
         // console.log(playables.playableAlbums);
         // console.log(playables.isSubscribed);
         
-        await musicStore.connect(user2).play(1);     
-        playables = await musicStore.users(user2.address);
-        // console.log(playables.playableAlbums);
+        await musicStore.connect(user2).play(1); 
         // console.log(playables.isSubscribed);
         
         // Test to confirm the amount earned function

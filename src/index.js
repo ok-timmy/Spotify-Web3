@@ -5,15 +5,18 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
 import { MoralisProvider } from "react-moralis";
+import { SpotifyProvider } from './Context/SpotifyContext';
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <MoralisProvider appId="4tm2g9vHdPGykGJ900aAih4tff03KAzgxR8xPehO" serverUrl="https://oumyv24uvnxi.usemoralis.com:2053/server">
+    {/* <MoralisProvider appId="4tm2g9vHdPGykGJ900aAih4tff03KAzgxR8xPehO" serverUrl="https://oumyv24uvnxi.usemoralis.com:2053/server"> */}
+      <SpotifyProvider>
       <BrowserRouter>
         <App />
       </BrowserRouter>
-    </MoralisProvider>
+      </SpotifyProvider>
+    {/* </MoralisProvider> */}
   </React.StrictMode>,
   document.getElementById('root')
 );

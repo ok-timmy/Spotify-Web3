@@ -11,9 +11,10 @@ contract MusicStore {
     uint uploadCost = 0;
     IERC20 token;
 
-    constructor() {
-        owner = 0xcF9Ab7DBED8d5D104167012C91a4Fb0b7504cd2B;
-    }
+    // constructor(address _owner) {
+    //     // owner = 0xcF9Ab7DBED8d5D104167012C91a4Fb0b7504cd2B;
+    //     owner = _owner;
+    // }
 
     mapping(address => User) public users;
     mapping(uint => Collection) public albums;
@@ -68,23 +69,25 @@ contract MusicStore {
 
     function subscribe(
         uint plan,
+        address _user,
         // IERC20 _token,
         uint price
-    ) public {
+    ) public returns(bool success) {
         // _token.transferFrom(msg.sender, address(this), price);
         if (plan == 1) {
-            users[msg.sender].playableAlbums += 50;
+            users[_user].playableAlbums += 50;
         }
         if (plan == 2) {
-            users[msg.sender].playableAlbums += 100;
+            users[_user].playableAlbums += 100;
         }
         if (plan == 3) {
-            users[msg.sender].playableAlbums += 200;
+            users[_user].playableAlbums += 200;
         }
         // _token.transferFrom(address(this), owner, price / 11);
-        users[msg.sender].isSubscribed = true;
+        users[_user].isSubscribed = true;
 
-        emit Subscribed(msg.sender, price, plan);
+        emit Subscribed(_user, price, plan);
+        return true;
     }
 
     function play(uint _id) public returns (bool success) {
@@ -169,6 +172,10 @@ contract MusicStore {
 
     function getUserUploads(address _user)public view returns (Collection []memory) {
         return users[_user].uploadedAlbums;
+    }
+
+    function getUserDetails(address _user) public view returns (User memory) {
+        return users[_user];
     }
 
     function rateAlbum(uint _albumId, address _user, uint _rating) public {
