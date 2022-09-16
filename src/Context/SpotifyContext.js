@@ -85,7 +85,23 @@ export const SpotifyProvider = ({ children }) => {
   };
 
   //Function to get the permission to play an album
-  const getPermissionToPlay = async () => {};
+  const getPermissionToPlay = async () => {
+    await Contract.setProvider(
+      "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
+
+    );
+    const musicStoreContract = await new web3.eth.Contract(
+      musicStoreABI,
+      // "0xA844156Ba166535dD3ab29cA0fB93Ab48Dd6b953"
+      "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
+    );
+
+    await musicStoreContract.methods.play(1).send({from: currentAccount}, (err, result)=> {
+      if(err){
+        console.log(err)
+      } console.log(result);
+    })
+  };
 
   //Function to get all albums
   const getAllAlbums = async () => {
@@ -118,7 +134,7 @@ export const SpotifyProvider = ({ children }) => {
     );
 
     const allAlbums = await musicStoreContract.methods
-    .subscribe(2, currentAccount, toWei("100000000000000000")).send({from: currentAccount}, (err, result)=> {
+    .subscribe(3, currentAccount, toWei("100000000000000000")).send({from: currentAccount}, (err, result)=> {
       if(err){
         console.log(err) 
       } console.log(result)
@@ -130,7 +146,23 @@ export const SpotifyProvider = ({ children }) => {
   const getCategory = async (category) => {};
 
   //Function to get all published albums by a user
-  const getUserAlbums = async (user) => {};
+  const getUserAlbums = async (user) => {
+    await Contract.setProvider(
+      "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
+
+    );
+    const musicStoreContract = await new web3.eth.Contract(
+      musicStoreABI,
+      // "0xA844156Ba166535dD3ab29cA0fB93Ab48Dd6b953"
+      "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
+    );
+
+   await musicStoreContract.methods.getUserUploads(currentAccount).call((err, result)=> {
+    if(err){
+      console.log(err)
+    } console.log(result)
+   })
+  };
 
   //Function to withdraw from the app
   const withdraw = async (user, amount) => {};
@@ -145,6 +177,8 @@ export const SpotifyProvider = ({ children }) => {
         getAllAlbums,
         userSubscribe,
         uploadAlbum,
+        getUserAlbums,
+        getPermissionToPlay,
       }}
     >
       {children}{" "}

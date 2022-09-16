@@ -238,6 +238,33 @@ contract MusicStore {
         return false;
     }
 
+// URGENT TODOS
+/*
+1. No of streams is not updating when play button is clicked.
+2. Optimize your code to use less gas
+3. Find a way to do the tokens that will be used to make payment to the dapp
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //1. Create mapping that connects a user to a struct (which contains a bool for subscribed, a uint for the number of album streams they get, an array of the albums they have played)
     //2. Subscribe function: Users can subscribe to a particular plan,
     // then get a particular number of album stream limits,
