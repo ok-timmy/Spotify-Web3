@@ -7,7 +7,6 @@ import { toWei } from "../Utils/convert";
 export const SpotifyContext = React.createContext();
 
 export const SpotifyProvider = ({ children }) => {
-  // var Contract = require("web3-eth-contract");
 
   const musicStoreABI = musicStoreJSON.abi;
   const [currentAccount, setCurrentAccount] = useState();
@@ -143,7 +142,25 @@ export const SpotifyProvider = ({ children }) => {
   }
 
   //Function to filter an album by category based on route
-  const getCategory = async (category) => {};
+  const getCategory = async (category) => {
+    await Contract.setProvider(
+      "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
+
+    );
+    const musicStoreContract = await new web3.eth.Contract(
+      musicStoreABI,
+      // "0xA844156Ba166535dD3ab29cA0fB93Ab48Dd6b953"
+      "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
+    );
+
+    const allAlbums = await musicStoreContract.methods
+    .getAllAlbums().call();
+
+    const albumCategory = allAlbums.filter((e)=>{
+      return category = e.category
+    })
+    console.log(albumCategory);
+  };
 
   //Function to get all published albums by a user
   const getUserAlbums = async (user) => {
@@ -165,7 +182,23 @@ export const SpotifyProvider = ({ children }) => {
   };
 
   //Function to withdraw from the app
-  const withdraw = async (user, amount) => {};
+  const withdraw = async (user, amount) => {
+    await Contract.setProvider(
+      "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
+
+    );
+    const musicStoreContract = await new web3.eth.Contract(
+      musicStoreABI,
+      // "0xA844156Ba166535dD3ab29cA0fB93Ab48Dd6b953"
+      "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
+    );
+
+    await musicStoreContract.methods.withdraw(toWei("1000000000000000")).send({from: currentAccount}, (err, result)=> {
+      if(err) {
+        console.log(err)
+      } console.log(result);
+    })
+  };
 
   return (
     <SpotifyContext.Provider
@@ -179,6 +212,8 @@ export const SpotifyProvider = ({ children }) => {
         uploadAlbum,
         getUserAlbums,
         getPermissionToPlay,
+        withdraw,
+        getCategory
       }}
     >
       {children}{" "}

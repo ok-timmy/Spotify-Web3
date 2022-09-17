@@ -7,7 +7,7 @@ import { SpotifyContext } from "../../Context/SpotifyContext";
 
 
 const Home = () => {
-  const {getUserDetails, getAllAlbums, userSubscribe, uploadAlbum, getUserAlbums, getPermissionToPlay} = useContext(SpotifyContext)
+  const {getUserDetails, getAllAlbums, userSubscribe, uploadAlbum, getUserAlbums, getPermissionToPlay, withdraw} = useContext(SpotifyContext)
   return (
     <>
     <button className="bg-white text-black ml-4 px-3 py-3" onClick={uploadAlbum}>Upload</button>
@@ -16,6 +16,7 @@ const Home = () => {
     <button className="bg-white text-black ml-4 px-3 py-3" onClick={userSubscribe}>User Subscribe</button>
     <button className="bg-white text-black ml-4 px-3 py-3" onClick={getUserAlbums}>User Albums</button>
     <button className="bg-white text-black ml-4 px-3 py-3" onClick={getPermissionToPlay}>Play Album</button>
+    <button className="bg-white text-black ml-4 px-3 py-3" onClick={withdraw}>Withdraw</button>
       <div className="mt-2 px-6 pt-6">
         <div className="flex justify-between">
           <h2 className="text-white text-2xl"> Spotify Playlists</h2> 

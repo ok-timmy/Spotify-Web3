@@ -12,6 +12,7 @@ import Search from "./pages/Search/Search"
 import SideNav from "./components/SideNav/SideNav";
 import Earnings from "./pages/Earnings/Earnings";
 import Library from "./pages/Library/Library"
+import Album from "./pages/Album/Album"
 
 const { Footer, Content } = Layout;
 
@@ -32,6 +33,7 @@ const App = () => {
             <Route path="search" element={<Search/>}/>
             <Route path="earnings" element={<Earnings/>}/>
             <Route path="library" element={<Library/>}/>
+            <Route path={`albums/:id`} element={<Album/>}/>
           </Routes>
         </Content>
       </Layout>
