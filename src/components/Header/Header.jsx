@@ -11,7 +11,7 @@ const Header = () => {
   console.log(currentAccount);
 
   return (
-    <div className=" sticky bg-[#101010]  top-0 right-0 left-0 z-50">
+    <div className=" sticky bg-[#101010]  top-0 right-0 left-0 z-[100]">
       <div className="flex justify-between min-w-full pl-12 pr-8 py-3">
       <div className="flex justify-between w-96">
         <div className="flex justify-between w-12 py-3">

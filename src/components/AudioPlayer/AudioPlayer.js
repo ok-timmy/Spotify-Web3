@@ -35,23 +35,25 @@ function AudioPlayer({ nftAlbum }) {
     return `${returnMin}: ${returnSec}`;
   };
 
-  const { resolveLink } = useIPFS();
+  // const { resolveLink } = useIPFS();
   return (
     <>
       <div
         className="buttons"
         style={{ width: "300px", justifyContent: "start" }}
       >
-        <img
+        {/* <img
           src={resolveLink(JSON.parse(nftAlbum[trackIndex].metadata).image)}
           alt="currentCover"
           className="cover"
-        />
+        /> */}
         <div>
           <div className="songTitle">
-            {JSON.parse(nftAlbum[trackIndex].metadata).name}
+            {/* {JSON.parse(nftAlbum[trackIndex].metadata).name} */}
           </div>
-          <div className="songAlbum">{nftAlbum[trackIndex].name}</div>
+          <div className="songAlbum">
+            {/* {nftAlbum[trackIndex].name} */}
+            </div>
         </div>
       </div>
       <div>
@@ -76,7 +78,7 @@ function AudioPlayer({ nftAlbum }) {
             onChange={(value) => onSearch(value)}
             onAfterChange={onSearchEnd}
           />
-          {duration ? minSec(Math.round(duration)) : "00:00"}
+          {/* {duration ? minSec(Math.round(duration)) : "00:00"} */}
         </div>
       </div>
       <div className="soundDiv">

@@ -1,11 +1,17 @@
 import React from "react";
+import {
+  PlayCircleFilled,
+  HeartOutlined,
+  EllipsisOutlined,
+  ClockCircleOutlined,
+} from "@ant-design/icons";
 
 const Album = () => {
   return (
     <div>
       <div className="flex flex-col">
         <div className="bg-[url('https://c4.wallpaperflare.com/wallpaper/493/874/387/nicki-minaj-wallpaper-preview.jpg')] bg-no-repeat bg-cover px-8 h-[20rem] object-fill">
-          <div className="flex flex-col justify-between">
+          <div className="flex flex-col content-end h-64">
             <div className="text-white text-lg font-bold">PLAYLIST</div>
             <div className="text-white text-7xl font-bold"> RapCaviar</div>
             <div className="text-gray-300 text-lg font-semibold">
@@ -29,116 +35,120 @@ const Album = () => {
         </div>
 
         <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
-          <div className="flex justify-start items-center pb-4">
-            <div className="w-48 flex justify-between"></div>
+          <div className="flex justify-start items-center pb-4 px-8">
+            <div className="w-44 flex justify-between content-center">
+              <div className=" text-white text-[3.5rem] z-50 hover:scale-110 hover:cursor-default">
+                <PlayCircleFilled style={{ color: "#1FDF64" }} />
+              </div>
+              <div className=" text-white text-[2rem] pt-6 hover:cursor-pointer">
+                <HeartOutlined
+                  style={{ color: "#FDFDFD", fontWeight: "100" }}
+                />
+              </div>
+              <div className=" text-white text-[2rem] hover:cursor-pointer pt-6">
+                <EllipsisOutlined
+                  style={{ color: "#FDFDFD", fontWeight: "200" }}
+                />
+              </div>
+            </div>
           </div>
-          <table className="w-full text-sm text-left text-gray-400">
-            <thead className="text-xs uppercase bg-gray-700 text-gray-400">
-              <tr>
-                <th scope="col" className="p-4">
-                  <div className="flex items-center">#</div>
-                </th>
-                <th scope="col" className="py-3 px-6">
-                  Product name
-                </th>
-                <th scope="col" className="py-3 px-6">
-                  Color
-                </th>
-                <th scope="col" className="py-3 px-6">
-                  Category
-                </th>
-                <th scope="col" className="py-3 px-6">
-                  Price
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className=" border-b text-gray-400 bg-gray-600 border-gray-700 hover:bg-gray-700">
-                <td className="p-4 w-4">
-                  <div className="flex items-center">0</div>
-                </td>
-                <th
-                  scope="row"
-                  className="py-4 px-6 font-medium  whitespace-nowrap "
-                >
-                  Apple MacBook Pro 17"
-                </th>
-                <td className="py-4 px-6">Sliver</td>
-                <td className="py-4 px-6">Laptop</td>
-                <td className="py-4 px-6">$2999</td>
-              </tr>
-              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td className="p-4 w-4">
-                  <div className="flex items-center">1</div>
-                </td>
-                <th
-                  scope="row"
-                  className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  Microsoft Surface Pro
-                </th>
-                <td className="py-4 px-6">White</td>
-                <td className="py-4 px-6">Laptop PC</td>
-                <td className="py-4 px-6">$1999</td>
-              </tr>
-              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td className="p-4 w-4">
-                  <div className="flex items-center">2</div>
-                </td>
-                <th
-                  scope="row"
-                  className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  Magic Mouse 2
-                </th>
-                <td className="py-4 px-6">Black</td>
-                <td className="py-4 px-6">Accessories</td>
-                <td className="py-4 px-6">$99</td>
-              </tr>
-              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td className="p-4 w-4">
-                  <div className="flex items-center">3</div>
-                </td>
-                <th
-                  scope="row"
-                  className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  Apple Watch
-                </th>
-                <td className="py-4 px-6">Silver</td>
-                <td className="py-4 px-6">Accessories</td>
-                <td className="py-4 px-6">$179</td>
-              </tr>
-              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td className="p-4 w-4">
-                  <div className="flex items-center">4</div>
-                </td>
-                <th
-                  scope="row"
-                  className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  iPad
-                </th>
-                <td className="py-4 px-6">Gold</td>
-                <td className="py-4 px-6">Tablet</td>
-                <td className="py-4 px-6">$699</td>
-              </tr>
-              <tr className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td className="p-4 w-4">
-                  <div className="flex items-center">5</div>
-                </td>
-                <th
-                  scope="row"
-                  className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  Apple iMac 27"
-                </th>
-                <td className="py-4 px-6">Silver</td>
-                <td className="py-4 px-6">PC Desktop</td>
-                <td className="py-4 px-6">$3999</td>
-              </tr>
-            </tbody>
-          </table>
+          <div className="px-8">
+            <table className="w-full text-sm text-left text-gray-400">
+              <thead className=" uppercase bg-transparent text-gray-400 border-b border-gray-200 text-[1rem] font-normal">
+                <tr>
+                  <th scope="col" className="p-4">
+                    #
+                  </th>
+                  <th scope="col" className="py-3 px-1">
+                    Title
+                  </th>
+                  <th scope="col" className="py-3 px-6">
+                    Album
+                  </th>
+                  <th scope="col" className="py-3 px-6">
+                    Date Added
+                  </th>
+                  <th scope="col" className="py-3 px-6">
+                    <ClockCircleOutlined />
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className=" text-gray-400 bg-transparent border-gray-700 hover:bg-gray-700 ">
+                  <td className="p-4 w-4">0</td>
+                  <th
+                    scope="row"
+                    className="py-4 px-1 font-medium text-gray-200  whitespace-nowrap "
+                  >
+                    Apple MacBook Pro 17
+                  </th>
+                  <td className="py-4 px-6">Sliver</td>
+                  <td className="py-4 px-6">Laptop</td>
+                  <td className="py-4 px-6">3:22</td>
+                </tr>
+                <tr className="bg-transparent hover:bg-gray-700 hover:rounded-md ">
+                  <td className="p-4 w-4">1</td>
+                  <th
+                    scope="row"
+                    className="py-4 px-1font-medium text-gray-200 whitespace-nowrap "
+                  >
+                    Microsoft Surface Pro
+                  </th>
+                  <td className="py-4 px-6">White</td>
+                  <td className="py-4 px-6">Laptop PC</td>
+                  <td className="py-4 px-6">3:47</td>
+                </tr>
+                <tr className="bg-transparent hover:bg-gray-700">
+                  <td className="p-4 w-4">2</td>
+                  <th
+                    scope="row"
+                    className="py-4 px-1 font-medium text-gray-200 whitespace-nowrap"
+                  >
+                    Magic Mouse 2
+                  </th>
+                  <td className="py-4 px-6">Black</td>
+                  <td className="py-4 px-6">Accessories</td>
+                  <td className="py-4 px-6">3:05</td>
+                </tr>
+                <tr className="bg-transparent  hover:bg-gray-700">
+                  <td className="p-4 w-4">3</td>
+                  <th
+                    scope="row"
+                    className="py-4 px-1 font-medium text-gray-200 whitespace-nowrap "
+                  >
+                    Apple Watch
+                  </th>
+                  <td className="py-4 px-6">Silver</td>
+                  <td className="py-4 px-6">Accessories</td>
+                  <td className="py-4 px-6">2:15</td>
+                </tr>
+                <tr className="bg-transparent  ">
+                  <td className="p-4 w-4">4</td>
+                  <th
+                    scope="row"
+                    className="py-4 px-1 font-medium text-gray-200 whitespace-nowrap"
+                  >
+                    iPad
+                  </th>
+                  <td className="py-4 px-6">Gold</td>
+                  <td className="py-4 px-6">Tablet</td>
+                  <td className="py-4 px-6">4:00</td>
+                </tr>
+                <tr className="bg-transparent hover:bg-gray-700">
+                  <td className="p-4 w-4">5</td>
+                  <th
+                    scope="row"
+                    className="py-4 px-1 font-medium text-gray-200 whitespace-nowrap"
+                  >
+                    Apple iMac 27"
+                  </th>
+                  <td className="py-4 px-6">Silver</td>
+                  <td className="py-4 px-6">PC Desktop</td>
+                  <td className="py-4 px-6">2:45</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

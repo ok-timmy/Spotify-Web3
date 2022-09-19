@@ -6,7 +6,7 @@ import "./IERC20.sol";
 
 contract MusicStore {
     address owner;
-    uint albumCount;
+    uint playlistCount;
     uint playCost = 0;
     uint uploadCost = 0;
     IERC20 token;
@@ -17,16 +17,15 @@ contract MusicStore {
     // }
 
     mapping(address => User) public users;
-    mapping(uint => Collection) public albums;
-    mapping (uint=> uint[]) public ratings;
-    Collection [] public albumsList;
+    mapping(uint => Collection) public playlists;
+    mapping(uint => uint[]) public ratings;
+    Collection[] public playlistsArray;
 
     struct Collection {
         address author;
         uint id;
         string title;
         string name;
-        string category;
         string genre;
         string[] tracks;
         string coverImage;
@@ -37,11 +36,11 @@ contract MusicStore {
 
     struct User {
         bool isSubscribed;
-        uint playableAlbums;
-        // string[] playedAlbums;
-        Collection [] uploadedAlbums;
-        uint[] likedAlbums;
-        uint[] ratedAlbums;
+        uint playablePlaylists;
+        string[] playedPlaylists;
+        Collection[] uploadedPlaylists;
+        uint[] likedPlaylists;
+        uint[] ratedPlaylists;
         uint amountEarned;
     }
 
@@ -50,7 +49,6 @@ contract MusicStore {
         address author,
         string title,
         string name,
-        string category,
         string genre,
         string[] tracks,
         string coverImage,
@@ -59,8 +57,7 @@ contract MusicStore {
     event Played(
         uint id,
         address Author,
-        string albumTitle,
-        string category,
+        string playlistTitle,
         uint releaseDate,
         uint noOfStreams
     );
@@ -72,75 +69,71 @@ contract MusicStore {
         address _user,
         // IERC20 _token,
         uint price
-    ) public returns(bool success) {
+    ) public returns (bool success) {
         User storage user = users[_user];
         // _token.transferFrom(msg.sender, address(this), price);
         if (plan == 1) {
-            user.playableAlbums += 50;
-            // _token.transferFrom(address(this), owner, price / 11);
-        user.isSubscribed = true;
-
-        emit Subscribed(_user, price, plan);
-        return true;
-        }
-        if (plan == 2) {
-            user.playableAlbums += 100;
+            user.playablePlaylists += 50;
             // _token.transferFrom(address(this), owner, price / 11);
             user.isSubscribed = true;
-    
+
+            emit Subscribed(_user, price, plan);
+            return true;
+        }
+        if (plan == 2) {
+            user.playablePlaylists += 100;
+            // _token.transferFrom(address(this), owner, price / 11);
+            user.isSubscribed = true;
+
             emit Subscribed(_user, price, plan);
             return true;
         }
         if (plan == 3) {
-            user.playableAlbums += 200;
+            user.playablePlaylists += 200;
             // _token.transferFrom(address(this), owner, price / 11);
             user.isSubscribed = true;
-    
+
             emit Subscribed(_user, price, plan);
             return true;
         }
-        
     }
 
     function play(uint _id) public returns (bool success) {
         require(
-            users[msg.sender].playableAlbums > 0,
+            users[msg.sender].playablePlaylists > 0,
             "You Do Not have an active subscription to play album, Please Subscribe"
         );
-        albums[_id].noOfStreams += 1;
-        users[albums[_id].author].amountEarned += 100000000000000000;
+        playlists[_id].noOfStreams += 1;
+        users[playlists[_id].author].amountEarned += 100000000000000000;
         emit Played(
             _id,
-            albums[_id].author,
-            albums[_id].title,
-            albums[_id].category,
-            albums[_id].releaseDate,
-            albums[_id].noOfStreams
+            playlists[_id].author,
+            playlists[_id].title,
+            playlists[_id].releaseDate,
+            playlists[_id].noOfStreams
         );
-        users[msg.sender].playableAlbums -= 1;
-        if (users[msg.sender].playableAlbums == 0) {
+        users[msg.sender].playablePlaylists -= 1;
+        if (users[msg.sender].playablePlaylists == 0) {
             users[msg.sender].isSubscribed = false;
         }
         return true;
     }
 
-    function uploadAlbum(
+    function uploadPlaylist(
         // address _author,
         string memory _title,
         string memory _name,
-        string memory _category,
         string memory _genre,
         string[] memory _tracks,
         string memory _coverImage,
         uint _releaseDate
     ) public payable {
-        albumCount++;
+        playlistCount++;
         Collection memory newCollection = Collection(
             msg.sender,
-            albumCount,
+            playlistCount,
             _title,
             _name,
-            _category,
             _genre,
             _tracks,
             _coverImage,
@@ -148,15 +141,14 @@ contract MusicStore {
             0,
             0
         );
-        albums[albumCount] = newCollection;
-        albumsList.push(newCollection);
-        users[msg.sender].uploadedAlbums.push(newCollection);
+        playlists[playlistCount] = newCollection;
+        playlistsArray.push(newCollection);
+        users[msg.sender].uploadedPlaylists.push(newCollection);
 
         emit Uploaded(
             msg.sender,
             _title,
             _name,
-            _category,
             _genre,
             _tracks,
             _coverImage,
@@ -172,65 +164,75 @@ contract MusicStore {
             users[msg.sender].amountEarned > 0,
             "You Do not have enough balance to withdraw from"
         );
-        require(users[msg.sender].amountEarned> _amount, "Insuficient Balance");
+        require(
+            users[msg.sender].amountEarned > _amount,
+            "Insuficient Balance"
+        );
         // _token.transferFrom(address(this), _user, _amount);
         users[msg.sender].amountEarned -= _amount;
         emit Withdrawn(_amount, msg.sender, users[msg.sender].amountEarned);
     }
 
-    function getAllAlbums() public view returns ( Collection[] memory) {
-        return albumsList;
+    function getAllPlaylists() public view returns (Collection[] memory) {
+        return playlistsArray;
     }
 
-    function getUserUploads(address _user)public view returns (Collection []memory) {
-        return users[_user].uploadedAlbums;
+    function getUserUploads(address _user)
+        public
+        view
+        returns (Collection[] memory)
+    {
+        return users[_user].uploadedPlaylists;
     }
 
     function getUserDetails(address _user) public view returns (User memory) {
         return users[_user];
     }
 
-    function rateAlbum(uint _albumId, address _user, uint _rating) public {
+    function rateAlbum(
+        uint _playlistId,
+        address _user,
+        uint _rating
+    ) public {
         User storage user = users[_user];
-        Collection storage collection = albums[_albumId];
+        Collection storage collection = playlists[_playlistId];
 
-        for (uint i = 0; i < user.ratedAlbums.length; i++) {
-            if (user.ratedAlbums[i] == albums[_albumId].id) {
+        for (uint i = 0; i < user.ratedPlaylists.length; i++) {
+            if (user.ratedPlaylists[i] == playlists[_playlistId].id) {
                 revert("Album Has been Rated already");
-            }
-            else {
-                user.ratedAlbums.push(_albumId);
-                ratings[_albumId].push(_rating);
+            } else {
+                user.ratedPlaylists.push(_playlistId);
+                ratings[_playlistId].push(_rating);
                 uint sum = 0;
-                for (uint j = 0; j < ratings[_albumId].length; j++) {
-                    sum += ratings[_albumId][j];
+                for (uint j = 0; j < ratings[_playlistId].length; j++) {
+                    sum += ratings[_playlistId][j];
                 }
-                collection.ratings  = sum / ratings[_albumId].length;    
+                collection.ratings = sum / ratings[_playlistId].length;
             }
         }
     }
 
-
-    function likeAlbum(uint _albumId) public {
+    function likePlaylist(uint _playlistId) public {
         User storage user = users[msg.sender];
 
-        for (uint i = 0; i < user.likedAlbums.length; i++) {
-            if (user.likedAlbums[i] == albums[_albumId].id) {
+        for (uint i = 0; i < user.likedPlaylists.length; i++) {
+            if (user.likedPlaylists[i] == playlists[_playlistId].id) {
                 revert("Album Has been liked already");
             }
-            user.likedAlbums.push(_albumId);
+            user.likedPlaylists.push(_playlistId);
         }
     }
 
-    function isLiked(address _user, uint _albumId)
+    function isLiked(address _user, uint _playlistId)
         public
         view
-        returns (bool liked) {
-        // Collection storage collection = albums[_albumId];
+        returns (bool liked)
+    {
+        // Collection storage collection = playlists[_playlistId];
         User storage user = users[_user];
 
-        for (uint i = 0; i < user.likedAlbums.length; i++) {
-            if (user.likedAlbums[i] == albums[_albumId].id) {
+        for (uint i = 0; i < user.likedPlaylists.length; i++) {
+            if (user.likedPlaylists[i] == playlists[_playlistId].id) {
                 return true;
             }
         }
@@ -238,34 +240,15 @@ contract MusicStore {
         return false;
     }
 
-// URGENT TODOS
-/*
+    // URGENT TODOS
+    /*
 1. No of streams is not updating when play button is clicked.
 2. Optimize your code to use less gas
 3. Find a way to do the tokens that will be used to make payment to the dapp
 
 */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //1. Create mapping that connects a user to a struct (which contains a bool for subscribed, a uint for the number of album streams they get, an array of the albums they have played)
+    //1. Create mapping that connects a user to a struct (which contains a bool for subscribed, a uint for the number of album streams they get, an array of the playlists they have played)
     //2. Subscribe function: Users can subscribe to a particular plan,
     // then get a particular number of album stream limits,
     // the function then sends a particular amount, depending on their subscription to the contract

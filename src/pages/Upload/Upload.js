@@ -18,7 +18,7 @@ const Upload = () => {
 
   return (
     <div className="py-8 px-16 text-white">
-      <div className="text-4xl font-semibold mb-8 text-center">Create Album </div>
+      <div className="text-4xl font-semibold mb-8 text-center">Create Playlist </div>
 
 <form>
       <div className="w-full max-w-2xl">
@@ -51,7 +51,7 @@ const Upload = () => {
               className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
               htmlFor="Album-Title"
             >
-              Album Title
+              Playlist Title
             </label>
           </div>
           <div className="md:w-2/3">
@@ -62,40 +62,19 @@ const Upload = () => {
           </div>
         </div>
 
-        {/* Category */}
-
-        <div className="md:flex md:items-center mb-6">
-        <div className="md:w-1/3">
-        <label for="underline_select" className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
-          Category
-        </label>
-        </div>
-        <div className="md:w-2/3">
-        <select
-          id="underline_select"
-          className="block py-2.5 px-2 w-full text-sm bg-gray-600 border-0 border-b-2  appearance-none text-gray-400 border-gray-900 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
-        >
-          <option selected>Select a category</option>
-          <option value="US">United States</option>
-          <option value="CA">Canada</option>
-          <option value="FR">France</option>
-          <option value="DE">Germany</option>
-        </select>
-        </div>
-        </div>
 
         {/* Genre */}
         
         <div className="md:flex md:items-center mb-6">
         <div className="md:w-1/3">
-        <label for="underline_select" className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
+        <label htmlFor="underline_select" className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
           Genre
         </label>
         </div>
         <div className="md:w-2/3">
         <select
           id="underline_select"
-          class="block py-2.5 px-2 w-full text-sm text-gray-400 bg-gray-600 border-0 border-b-2 border-gray-900 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+          className="block py-2.5 px-2 w-full text-sm text-gray-400 bg-gray-600 border-0 border-b-2 border-gray-900 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
         >
           <option selected>Select a Genre</option>
           <option value="US">United States</option>

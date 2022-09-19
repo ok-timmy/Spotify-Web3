@@ -1,7 +1,7 @@
 import React from 'react'
 import { Layout } from "antd";
 import Spotify from "../../images/Spotify.png";
-import { SearchOutlined, HomeFilled } from "@ant-design/icons";
+import { SearchOutlined, HomeFilled, SketchOutlined, FolderOpenOutlined, FolderAddOutlined, HeartOutlined, FolderViewOutlined } from "@ant-design/icons";
 import "./SideNav.css"
 import {  Link, } from "react-router-dom";
 
@@ -34,13 +34,13 @@ const SideNav = () => {
 
           <Link to={'/library'}>
           <div className="text-[0.9rem] text-white  flex text-center font-thin">
-            <SearchOutlined style={{ fontSize: "1.1rem", color:"#B3B3B3"  }} />{" "}
+            <FolderOpenOutlined style={{ fontSize: "1.1rem", color:"#B3B3B3"  }} />{" "}
             <span className="ml-4 ">Your Library</span>
           </div>
           </Link>
           <Link to={'/earnings'}>
           <div className="text-[0.9rem] text-white  flex text-center font-thin">
-            <SearchOutlined style={{ fontSize: "1.1rem", color:"#B3B3B3"  }} />{" "}
+            <SketchOutlined style={{ fontSize: "1.1rem", color:"#4169E1"  }} />{" "}
             <span className="ml-4 ">Earnings</span>
           </div>
           </Link>
@@ -50,19 +50,19 @@ const SideNav = () => {
           <Link to={"/upload"}>
             {" "}
             <div className="text-[0.9rem] text-white  flex text-center font-thin">
-              <HomeFilled style={{ fontSize: "1.1rem", color:"#B3B3B3"  }} />{" "}
+              <FolderAddOutlined style={{ fontSize: "1.1rem", color:"#B3B3B3"  }} />{" "}
               <span className="ml-4 "> Publish Playlist</span>
             </div>
           </Link>
           <Link to={"/favourites"}>
             <div className="text-[0.9rem] text-white  flex text-center font-thin">
-              <SearchOutlined style={{ fontSize: "1.1rem", color:"#B3B3B3"  }} />{" "}
+              <HeartOutlined style={{ fontSize: "1.1rem", color:"#B3B3B3"  }} />{" "}
               <span className="ml-4 "> Liked Album</span>
             </div>
           </Link>
           <Link to={"/published"}>
             <div className="text-[0.9rem] text-white  flex text-center font-thin">
-              <SearchOutlined style={{ fontSize: "1.1rem", color:"#B3B3B3"  }} />{" "}
+              <FolderViewOutlined style={{ fontSize: "1.1rem", color:"#B3B3B3"  }} />{" "}
               <span className="ml-4 "> My Works</span>
             </div>
           </Link>

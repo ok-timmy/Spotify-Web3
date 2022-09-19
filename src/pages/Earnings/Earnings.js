@@ -6,7 +6,7 @@ const Earnings = () => {
       <div className="flex flex-col px-4 py-4">
         <div className="bg-black rounded-2xl shadow-lg w-auto text-white px-8 py-4">
           {" "}
-          <p className="text-3xl">Hello There,</p>{" "}
+          <p className="text-3xl">Hello Fren,</p>{" "}
           <p className="text-2xl">0xcF9Ab7DBED8d5D104167012C91a4Fb0b7504cd2B</p>{" "}
         </div>
         <div className="bg-black flex justify-between rounded-2xl shadow-lg w-auto text-white px-8 py-4 my-4">
