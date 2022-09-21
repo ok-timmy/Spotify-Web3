@@ -1,6 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
+import { SpotifyContext } from "../../Context/SpotifyContext";
 
 const Track = ({ num }) => {
+
+  const {setFile} = useContext(SpotifyContext)
+
+  const captureFile = (e) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+    const reader = new window.FileReader();
+    reader.readAsArrayBuffer(file);
+    reader.onloadend = () => {
+      const res = Buffer(reader.result)
+      console.log(res);
+      setFile(res)
+    }
+  }
   console.log(num);
   return (
     <div className="flex flex-col border-b border-white">
@@ -22,6 +37,7 @@ const Track = ({ num }) => {
             aria-describedby="file_input_help"
             id="file_input"
             type="file"
+          onChange={(e)=>captureFile(e)}
           />
           <div
             className="mt-1 text-sm text-gray-500 dark:text-gray-300"
@@ -47,6 +63,8 @@ const Track = ({ num }) => {
             aria-describedby="file_input_help"
             id="file_input"
             type="file"
+          onChange={(e)=>captureFile(e)}
+
           />
           <div
             className="mt-1 text-sm text-gray-500 dark:text-gray-300"

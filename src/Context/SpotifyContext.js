@@ -11,12 +11,11 @@ export const SpotifyProvider = ({ children }) => {
   const musicStoreABI = musicStoreJSON.abi;
   const [currentAccount, setCurrentAccount] = useState();
   const [isLoading, setisLoading] = useState(false);
+  const [file, setFile] = useState();
 
   var Contract = require("web3-eth-contract");
     const web3 = window.web3;
     
-
-
 
   //Function to connect account
   const connectWallet = async () => {
@@ -213,7 +212,9 @@ export const SpotifyProvider = ({ children }) => {
         getUserAlbums,
         getPermissionToPlay,
         withdraw,
-        getCategory
+        getCategory,
+        file,
+        setFile,
       }}
     >
       {children}{" "}

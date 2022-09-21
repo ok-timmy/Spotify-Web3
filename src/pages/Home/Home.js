@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import "./Home.css";
-// import { library } from "../../helpers/albumList";
 import AlbumCard from "../../components/AlbumCard/AlbumCard";
 import { SpotifyContext } from "../../Context/SpotifyContext";
 
