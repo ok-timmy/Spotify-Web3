@@ -1,3 +1,5 @@
 node_modules
 
-Solidity/node_modules
+Smart/node_modules
+
+.env

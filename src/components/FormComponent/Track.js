@@ -2,21 +2,38 @@ import React, { useContext } from "react";
 import { SpotifyContext } from "../../Context/SpotifyContext";
 
 const Track = ({ num }) => {
+  const { setFile, trackDetails, setTrackDetails } = useContext(SpotifyContext);
 
-  const {setFile} = useContext(SpotifyContext)
-
-  const captureFile = (e) => {
-    e.preventDefault();
+  const handleChange= (e) => {
     const file = e.target.files[0];
     const reader = new window.FileReader();
     reader.readAsArrayBuffer(file);
     reader.onloadend = () => {
-      const res = Buffer(reader.result)
-      console.log(res);
-      setFile(res)
-    }
-  }
+      const res = Buffer(reader.result);
+      setTrackDetails((prev)=> ([
+        ...prev, {
+          [e.target.name]: res,
+        }
+      ]))
+     
+    };
+  } 
+  console.log(trackDetails)
+
+  // const captureFile = (e) => {
+  //   e.preventDefault();
+  //   const file = e.target.files[0];
+  //   const reader = new window.FileReader();
+  //   reader.readAsArrayBuffer(file);
+  //   reader.onloadend = () => {
+  //     const res = Buffer(reader.result);
+  //     console.log(res);
+     
+  //   };
+  // };
   console.log(num);
+
+
   return (
     <div className="flex flex-col border-b border-white">
       <div>Track {num + 1}</div>
@@ -37,7 +54,8 @@ const Track = ({ num }) => {
             aria-describedby="file_input_help"
             id="file_input"
             type="file"
-          onChange={(e)=>captureFile(e)}
+            name="trackFile"
+            onChange={(e) => handleChange(e)}
           />
           <div
             className="mt-1 text-sm text-gray-500 dark:text-gray-300"
@@ -63,8 +81,8 @@ const Track = ({ num }) => {
             aria-describedby="file_input_help"
             id="file_input"
             type="file"
-          onChange={(e)=>captureFile(e)}
-
+            name= " trackCover"
+            onChange={(e) => handleChange(e)}
           />
           <div
             className="mt-1 text-sm text-gray-500 dark:text-gray-300"

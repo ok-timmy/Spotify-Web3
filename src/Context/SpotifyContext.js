@@ -3,19 +3,39 @@ import Web3 from "web3";
 import musicStoreJSON from "../contract_abi/MusicStore.json";
 import { toWei } from "../Utils/convert";
 
-
 export const SpotifyContext = React.createContext();
 
 export const SpotifyProvider = ({ children }) => {
-
   const musicStoreABI = musicStoreJSON.abi;
   const [currentAccount, setCurrentAccount] = useState();
   const [isLoading, setisLoading] = useState(false);
   const [file, setFile] = useState();
+  const [playlistDetails, setPlaylistDetails] = useState({
+    author: "",
+    title: "",
+    genre: "general",
+    cover: "",
+    tracks: [
+      {
+        trackUrl: "",
+        trackImageUrl: "",
+      },
+    ],
+  });
+  const [trackDetails, setTrackDetails] = useState([{
+    id: 0,
+    trackCover: [],
+    trackFile: []
+  }])
+
+
+  const handleChange = (e) => {
+    setPlaylistDetails((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
+    console.log(playlistDetails);
+  };
 
   var Contract = require("web3-eth-contract");
-    const web3 = window.web3;
-    
+  const web3 = window.web3;
 
   //Function to connect account
   const connectWallet = async () => {
@@ -35,10 +55,9 @@ export const SpotifyProvider = ({ children }) => {
   };
 
   //Function to Upload Album
-  const uploadAlbum = async() => {
+  const uploadAlbum = async () => {
     await Contract.setProvider(
       "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
-
     );
     const musicStoreContract = await new web3.eth.Contract(
       musicStoreABI,
@@ -47,25 +66,28 @@ export const SpotifyProvider = ({ children }) => {
     );
 
     const allAlbums = musicStoreContract.methods
-    .uploadAlbum(
-      "First Album",
-      "Sungba",
-      "Album",
-      "Hip-Hop",
-      ["Track 1", "Track 2", "Track 3", "Track 4", "Track 5"],
-      "Cover_Image.png",
-      200000000
-    ).send({from: currentAccount}, (err, result)=> {
-      if(err){console.log(err)} console.log(result);
-    });
+      .uploadAlbum(
+        "First Album",
+        "Sungba",
+        "Album",
+        "Hip-Hop",
+        ["Track 1", "Track 2", "Track 3", "Track 4", "Track 5"],
+        "Cover_Image.png",
+        200000000
+      )
+      .send({ from: currentAccount }, (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        console.log(result);
+      });
     console.log(allAlbums);
-  }
+  };
 
   //Function to get the User details of the connected account
   const getUserDetails = async () => {
     await Contract.setProvider(
       "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
-
     );
     const musicStoreContract = await new web3.eth.Contract(
       musicStoreABI,
@@ -74,10 +96,12 @@ export const SpotifyProvider = ({ children }) => {
     );
     // console.log(musicStoreContract.methods);
     const userDetails = await musicStoreContract.methods
-      .getUserDetails(currentAccount).call((err, result)=> {
-        if(err){
+      .getUserDetails(currentAccount)
+      .call((err, result) => {
+        if (err) {
           console.log(err);
-        } console.log(result)
+        }
+        console.log(result);
       });
     console.log(await userDetails);
   };
@@ -86,7 +110,6 @@ export const SpotifyProvider = ({ children }) => {
   const getPermissionToPlay = async () => {
     await Contract.setProvider(
       "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
-
     );
     const musicStoreContract = await new web3.eth.Contract(
       musicStoreABI,
@@ -94,18 +117,20 @@ export const SpotifyProvider = ({ children }) => {
       "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
     );
 
-    await musicStoreContract.methods.play(1).send({from: currentAccount}, (err, result)=> {
-      if(err){
-        console.log(err)
-      } console.log(result);
-    })
+    await musicStoreContract.methods
+      .play(1)
+      .send({ from: currentAccount }, (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        console.log(result);
+      });
   };
 
   //Function to get all albums
   const getAllAlbums = async () => {
     await Contract.setProvider(
       "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
-
     );
     const musicStoreContract = await new web3.eth.Contract(
       musicStoreABI,
@@ -113,17 +138,14 @@ export const SpotifyProvider = ({ children }) => {
       "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
     );
 
-    const allAlbums = await musicStoreContract.methods
-    .getAllAlbums().call();
+    const allAlbums = await musicStoreContract.methods.getAllAlbums().call();
     console.log(allAlbums);
   };
-
 
   //Function for User to subscribe
   const userSubscribe = async () => {
     await Contract.setProvider(
       "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
-
     );
     const musicStoreContract = await new web3.eth.Contract(
       musicStoreABI,
@@ -132,19 +154,20 @@ export const SpotifyProvider = ({ children }) => {
     );
 
     const allAlbums = await musicStoreContract.methods
-    .subscribe(3, currentAccount, toWei("100000000000000000")).send({from: currentAccount}, (err, result)=> {
-      if(err){
-        console.log(err) 
-      } console.log(result)
-    });
+      .subscribe(3, currentAccount, toWei("100000000000000000"))
+      .send({ from: currentAccount }, (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        console.log(result);
+      });
     console.log(allAlbums);
-  }
+  };
 
   //Function to filter an album by category based on route
   const getCategory = async (category) => {
     await Contract.setProvider(
       "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
-
     );
     const musicStoreContract = await new web3.eth.Contract(
       musicStoreABI,
@@ -152,12 +175,11 @@ export const SpotifyProvider = ({ children }) => {
       "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
     );
 
-    const allAlbums = await musicStoreContract.methods
-    .getAllAlbums().call();
+    const allAlbums = await musicStoreContract.methods.getAllAlbums().call();
 
-    const albumCategory = allAlbums.filter((e)=>{
-      return category = e.category
-    })
+    const albumCategory = allAlbums.filter((e) => {
+      return (category = e.category);
+    });
     console.log(albumCategory);
   };
 
@@ -165,7 +187,6 @@ export const SpotifyProvider = ({ children }) => {
   const getUserAlbums = async (user) => {
     await Contract.setProvider(
       "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
-
     );
     const musicStoreContract = await new web3.eth.Contract(
       musicStoreABI,
@@ -173,18 +194,20 @@ export const SpotifyProvider = ({ children }) => {
       "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
     );
 
-   await musicStoreContract.methods.getUserUploads(currentAccount).call((err, result)=> {
-    if(err){
-      console.log(err)
-    } console.log(result)
-   })
+    await musicStoreContract.methods
+      .getUserUploads(currentAccount)
+      .call((err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        console.log(result);
+      });
   };
 
   //Function to withdraw from the app
   const withdraw = async (user, amount) => {
     await Contract.setProvider(
       "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
-
     );
     const musicStoreContract = await new web3.eth.Contract(
       musicStoreABI,
@@ -192,11 +215,14 @@ export const SpotifyProvider = ({ children }) => {
       "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
     );
 
-    await musicStoreContract.methods.withdraw(toWei("1000000000000000")).send({from: currentAccount}, (err, result)=> {
-      if(err) {
-        console.log(err)
-      } console.log(result);
-    })
+    await musicStoreContract.methods
+      .withdraw(toWei("1000000000000000"))
+      .send({ from: currentAccount }, (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        console.log(result);
+      });
   };
 
   return (
@@ -215,6 +241,9 @@ export const SpotifyProvider = ({ children }) => {
         getCategory,
         file,
         setFile,
+        playlistDetails,
+        setPlaylistDetails,
+        handleChange, trackDetails, setTrackDetails
       }}
     >
       {children}{" "}
