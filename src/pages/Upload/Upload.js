@@ -4,6 +4,7 @@ import { Buffer } from "buffer";
 import { SpotifyContext } from "../../Context/SpotifyContext";
 import { create } from "ipfs-http-client";
 import useIPFS from "../../hooks/useIPFS";
+import { v4 as uuidv4 } from "uuid";
 //  require("dotenv-webpack");
 
 const projectId = "2EpAoml3QIi4f5tLxjsHGcHZwXr";
@@ -25,23 +26,42 @@ const client = create({
 });
 
 const Upload = () => {
-  const { playlistDetails, setPlaylistDetails, handleChange, trackDetails, setTrackDetails } =
-    useContext(SpotifyContext);
-  const [tracks, setTracks] = useState([{ id: 0, track: <Track num={0} /> }]);
-  const [imageFile, setimageFile] = useState();
+  const {
+    playlistDetails,
+    setPlaylistDetails,
+    handleChange,
+    playlistCover,
+    setPlaylistCover,
+    // isLoading,
+    setisLoading,
+  } = useContext(SpotifyContext);
+
   const { resolveLink } = useIPFS();
+  const [tArray, setTArray] = useState([
+    {
+      id: uuidv4(),
+      trackCover: [],
+      trackFile: [],
+    },
+  ]);
 
   const handleAddMore = () => {
-    if (tracks.length < 20) {
-      setTracks((prev) => [
-        ...tracks,
-        { id: prev.length, track: <Track num={prev.length} /> },
+    if (tArray.length < 20) {
+      const newId = uuidv4();
+      setTArray((prev) => [
+        ...prev,
+        { id: newId, trackCover: [], trackFile: [] },
       ]);
+      console.log(tArray);
     } else {
       alert("You Can't have more than 20 tracks on an album/Playlist");
-      console.log(tracks);
+      console.log(tArray);
     }
   };
+
+  // const removeTrack = (trackId) => {
+
+  // }
 
   const captureFile = (e) => {
     e.preventDefault();
@@ -50,19 +70,20 @@ const Upload = () => {
     reader.readAsArrayBuffer(file);
     reader.onloadend = () => {
       const res = Buffer(reader.result);
-      setimageFile(res);
-      console.log(res);
+      setPlaylistCover(res);
     };
   };
 
   const submitPlaylist = async (e) => {
     e.preventDefault();
+    setisLoading(true);
     console.log(playlistDetails);
 
+    //Upload Album Cover and get IPFS Link
     try {
-      client.add({ content: imageFile }).then((res) => {
+      client.add({ content: playlistCover }).then((res) => {
         const imageurl = `https://infura-ipfs.io/ipfs/${res.path}`;
-        console.log(imageurl)
+        console.log(imageurl);
         const imgIPFSLink = resolveLink(imageurl);
         console.log(imgIPFSLink);
         setPlaylistDetails((prev) => ({
@@ -70,25 +91,47 @@ const Upload = () => {
           cover: imgIPFSLink,
         }));
       });
-
-      console.log(playlistDetails);
     } catch (error) {
       console.log(error);
     }
 
-    //   console.log(file)
-    //   try {
+    //Upload each track and track cover on IPFS and get link
 
-    //  client.add({content: file}).then((res)=> {
-    //     const url = `https://infura-ipfs.io/ipfs/${res.path}`;
-    //   console.log(url);
-    //  })
+    let arrayStringify = [];
+    for (let i = 0; i < tArray.length; i++) {
+      const eachTrack = tArray[i];
+      let cont = {
+        coverLink: "",
+        fileLink: "",
+      };
+      try {
+        const coverRes = await client.add({ content: eachTrack.trackCover });
+        console.log(coverRes.path, "Track Cover path");
+        cont.coverLink = resolveLink(
+          `https://infura-ipfs.io/ipfs/${coverRes.path}`
+        );
 
-    //   } catch (error) {
-    //     console.log(error)
-    //   }
+        const trackRes = await client.add({ content: eachTrack.trackFile });
+        console.log(trackRes.path, "Track File Path");
+        cont.fileLink = resolveLink(
+          `https://infura-ipfs.io/ipfs/${trackRes.path}`
+        );
+
+        arrayStringify.push(cont);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    setPlaylistDetails((prev) => ({
+      ...prev,
+      tracks: JSON.stringify(arrayStringify),
+    }));
+
+    setisLoading(false);
   };
 
+  console.log(playlistDetails);
   return (
     <div className="py-8 px-16 text-white">
       <div className="text-4xl font-semibold mb-8 text-center">
@@ -216,8 +259,10 @@ const Upload = () => {
           {/* Release Date of Album or Playlist */}
 
           <div className="text-center">Upload Tracks</div>
-          {tracks.map(({ id, track }) => {
-            return <div key={id}>{track}</div>;
+          {tArray.map(({ id }) => {
+            return (
+              <Track key={id} id={id} tArray={tArray} setTArray={setTArray} />
+            );
           })}
 
           <div className="md:flex md:items-center">

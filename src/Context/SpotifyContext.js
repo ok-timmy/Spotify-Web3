@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Web3 from "web3";
 import musicStoreJSON from "../contract_abi/MusicStore.json";
 import { toWei } from "../Utils/convert";
@@ -9,28 +9,20 @@ export const SpotifyProvider = ({ children }) => {
   const musicStoreABI = musicStoreJSON.abi;
   const [currentAccount, setCurrentAccount] = useState();
   const [isLoading, setisLoading] = useState(false);
-  const [file, setFile] = useState();
+  const [playlistCover, setPlaylistCover] = useState();
   const [playlistDetails, setPlaylistDetails] = useState({
     author: "",
     title: "",
     genre: "general",
     cover: "",
-    tracks: [
-      {
-        trackUrl: "",
-        trackImageUrl: "",
-      },
-    ],
+    tracks: "",
   });
-  const [trackDetails, setTrackDetails] = useState([{
-    id: 0,
-    trackCover: [],
-    trackFile: []
-  }])
-
 
   const handleChange = (e) => {
-    setPlaylistDetails((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
+    setPlaylistDetails((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
     console.log(playlistDetails);
   };
 
@@ -61,7 +53,6 @@ export const SpotifyProvider = ({ children }) => {
     );
     const musicStoreContract = await new web3.eth.Contract(
       musicStoreABI,
-      // "0xA844156Ba166535dD3ab29cA0fB93Ab48Dd6b953"
       "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
     );
 
@@ -239,56 +230,17 @@ export const SpotifyProvider = ({ children }) => {
         getPermissionToPlay,
         withdraw,
         getCategory,
-        file,
-        setFile,
+        playlistCover,
+        setPlaylistCover,
         playlistDetails,
         setPlaylistDetails,
-        handleChange, trackDetails, setTrackDetails
+        handleChange,
       }}
     >
       {children}{" "}
     </SpotifyContext.Provider>
   );
 };
-
-// let fs = require("fs");
-// let axios = require("axios");
-
-// let media = ["JTiger.mp3", "JTwinkle.mp3", "NonFungible.png"];
-// let ipfsArray = [];
-// let promises = [];
-
-// for (let i = 0; i < media.length; i++) {
-//   promises.push(
-//     new Promise((res, rej) => {
-//       fs.readFile(`${__dirname}/export/${media[i]}`, (err, data) => {
-//         if (err) rej();
-//         ipfsArray.push({
-//           path: `media/${i}`,
-//           content: data.toString("base64"),
-//         });
-//         res();
-//       });
-//     })
-//   );
-// }
-// Promise.all(promises).then(() => {
-//   axios
-//     .post("https://deep-index.moralis.io/api/v2/ipfs/uploadFolder", ipfsArray, {
-//       headers: {
-//         "X-API-KEY":
-//           "AASBLH8iONxGtbGgOGjtNCDhAslKNUnOYtdBx1UYN6fbkqb1PxOg33aBBnahEBMZ",
-//         "Content-Type": "application/json",
-//         accept: "application/json",
-//       },
-//     })
-//     .then((res) => {
-//       console.log(res.data);
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// });
 
 /*
 Wrap this codes into a function that is usable on the frontend.

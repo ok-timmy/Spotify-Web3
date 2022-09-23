@@ -20,3 +20,9 @@
 - You should be able to able to upload albums/playlist
 - You should be able to search for an album/playlist
 - You should be able to add it to your list of favourite albums/Playlist
+
+
+## Todo
+- Rewrite contract to accept string for tracks
+- Implement a loading overlay for loading state
+- Implement the play track function for each track in the album

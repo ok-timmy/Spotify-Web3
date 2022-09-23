@@ -1,38 +1,44 @@
-import React, { useContext } from "react";
-import { SpotifyContext } from "../../Context/SpotifyContext";
+import React from "react";
+// import { SpotifyContext } from "../../Context/SpotifyContext";
 
-const Track = ({ num }) => {
-  const { setFile, trackDetails, setTrackDetails } = useContext(SpotifyContext);
+const Track = ({ tArray, id, setTArray }) => {
+  // console.log(tArray);
 
-  const handleChange= (e) => {
+  const num = tArray.findIndex((object) => {
+    return object.id === id;
+  });
+
+
+  const handleChange = (e) => {
     const file = e.target.files[0];
     const reader = new window.FileReader();
     reader.readAsArrayBuffer(file);
     reader.onloadend = () => {
       const res = Buffer(reader.result);
-      setTrackDetails((prev)=> ([
-        ...prev, {
-          [e.target.name]: res,
-        }
-      ]))
-     
+
+      if (e.target.name === "trackFile") {
+        setTArray((prev) =>
+          prev.map((obj) => {
+            if (obj.id === id) {
+              return { ...obj, trackFile: res };
+            }
+            return obj;
+          })
+        );
+      } else {
+        setTArray((prev) =>
+          prev.map((obj) => {
+            if (obj.id === id) {
+              return { ...obj, trackCover: res };
+            }
+            return obj;
+          })
+        );
+      }
     };
-  } 
-  console.log(trackDetails)
+  };
 
-  // const captureFile = (e) => {
-  //   e.preventDefault();
-  //   const file = e.target.files[0];
-  //   const reader = new window.FileReader();
-  //   reader.readAsArrayBuffer(file);
-  //   reader.onloadend = () => {
-  //     const res = Buffer(reader.result);
-  //     console.log(res);
-     
-  //   };
-  // };
-  console.log(num);
-
+  // console.log(num);
 
   return (
     <div className="flex flex-col border-b border-white">
@@ -55,6 +61,7 @@ const Track = ({ num }) => {
             id="file_input"
             type="file"
             name="trackFile"
+            accept=".mp3, .ogg"
             onChange={(e) => handleChange(e)}
           />
           <div
@@ -71,7 +78,7 @@ const Track = ({ num }) => {
             className="block mb-2 pb-6 text-sm text-gray-500 font-bold md:text-right md:mb-0 pr-4"
             htmlFor="file_input"
           >
-            Track 1 Image
+            Track {num + 1} Image
           </label>
         </div>
 
@@ -81,7 +88,8 @@ const Track = ({ num }) => {
             aria-describedby="file_input_help"
             id="file_input"
             type="file"
-            name= " trackCover"
+            name=" trackCover"
+            accept=".png, .jpg, .jpeg"
             onChange={(e) => handleChange(e)}
           />
           <div

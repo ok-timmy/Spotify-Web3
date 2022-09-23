@@ -70,8 +70,8 @@ const SideNav = () => {
       </div>
 
       <div className="flex flex-col mt-24">
-        <a className="text-xs text-gray-400">Cookies</a>
-        <a className="text-xs text-gray-400">Privacy</a>
+        <p className="text-xs text-gray-400 cursor-pointer">Cookies</p>
+        <p className="text-xs text-gray-400 cursor-pointer">Privacy</p>
       </div>
     </div>
   </Sider>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Routes, Route,} from "react-router-dom";
 import Home from "./pages/Home/Home";
 import "./App.css";
@@ -12,7 +12,7 @@ import SideNav from "./components/SideNav/SideNav";
 import Earnings from "./pages/Earnings/Earnings";
 import Library from "./pages/Library/Library"
 import Album from "./pages/Album/Album"
-// import AudioPlayer from "./components/AudioPlayer/AudioPlayer";
+import AudioPlayer from "./components/AudioPlayer/AudioPlayer";
 
 const { Footer, Content } = Layout;
 
@@ -38,7 +38,7 @@ const App = () => {
         </Content>
       </Layout>
       <Footer className="footer">
-        {/* {<AudioPlayer  />} */}
+        {<AudioPlayer  />}
       </Footer>
     </Layout>
   );

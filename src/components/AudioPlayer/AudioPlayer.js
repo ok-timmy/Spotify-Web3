@@ -7,24 +7,24 @@ import {
   PlayCircleFilled,
   PauseCircleFilled,
 } from "@ant-design/icons";
-import { useIPFS } from "../../hooks/useIPFS";
-import useAudio from "../../hooks/useAudio";
+// import { useIPFS } from "../../hooks/useIPFS";
+// import useAudio from "../../hooks/useAudio";
 import { Slider } from "antd";
 import { SafetyCertificateFilled } from "@ant-design/icons";
 
-function AudioPlayer({ nftAlbum }) {
-  const [
-    isPlaying,
-    duration,
-    toggle,
-    toNextTrack,
-    toPrevTrack,
-    trackProgress,
-    trackIndex,
-    onSearch,
-    onSearchEnd,
-    onVolume,
-  ] = useAudio(nftAlbum);
+function AudioPlayer() {
+  // const [
+  //   isPlaying,
+  //   duration,
+  //   toggle,
+  //   toNextTrack,
+  //   toPrevTrack,
+  //   trackProgress,
+  //   trackIndex,
+  //   onSearch,
+  //   onSearchEnd,
+  //   onVolume,
+  // ] = useAudio(nftAlbum);
 
   const minSec = (secs) => {
     const minutes = Math.floor(secs / 60);
@@ -58,25 +58,35 @@ function AudioPlayer({ nftAlbum }) {
       </div>
       <div>
         <div className="buttons">
-          <StepBackwardOutlined className="forback" onClick={toPrevTrack} />
-          {isPlaying ? (
-            <PauseCircleFilled className="pausePlay" onClick={toggle} />
-          ) : (
-            <PlayCircleFilled className="pausePlay" onClick={toggle} />
-          )}
-          <StepForwardOutlined className="forback" onClick={toNextTrack} />
+          <StepBackwardOutlined className="forback" 
+          // onClick={toPrevTrack}
+           />
+          {
+          // isPlaying ?
+           (
+            <PauseCircleFilled className="pausePlay" 
+            // onClick={toggle} 
+            />
+          ) 
+          // : (
+          //   <PlayCircleFilled className="pausePlay" onClick={toggle} />
+          // )
+          }
+          <StepForwardOutlined className="forback" 
+          // onClick={toNextTrack} 
+          />
         </div>
         <div className="buttons">
-          {minSec(trackProgress)}
+          {/* {minSec(trackProgress)} */}
           <Slider
-            value={trackProgress}
+            value={5}
             step={1}
             min={0}
-            max={duration ? duration : 0}
+            max={0}
             className="progress"
             tooltipVisible={false}
-            onChange={(value) => onSearch(value)}
-            onAfterChange={onSearchEnd}
+            // onChange={(value) => onSearch(value)}
+            // onAfterChange={onSearchEnd}
           />
           {/* {duration ? minSec(Math.round(duration)) : "00:00"} */}
         </div>
@@ -87,7 +97,7 @@ function AudioPlayer({ nftAlbum }) {
           className="volume"
           defaultValue={100}
           tooltipVisible={false}
-          onChange={(value) => onVolume(value/100)}
+          // onChange={(value) => onVolume(value/100)}
         />
       </div>
     </>
