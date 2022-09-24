@@ -8,24 +8,24 @@ import {
   PauseCircleFilled,
 } from "@ant-design/icons";
 // import { useIPFS } from "../../hooks/useIPFS";
-// import useAudio from "../../hooks/useAudio";
+import useAudio from "../../hooks/useAudio";
 import { Slider } from "antd";
 import { SafetyCertificateFilled } from "@ant-design/icons";
 
 function AudioPlayer() {
-  // const [
-  //   isPlaying,
-  //   duration,
-  //   toggle,
-  //   toNextTrack,
-  //   toPrevTrack,
-  //   trackProgress,
-  //   trackIndex,
-  //   onSearch,
-  //   onSearchEnd,
-  //   onVolume,
-  // ] = useAudio(nftAlbum);
-
+  const
+ [
+    isPlaying,
+    duration,
+    toggle,
+    // toNextTrack,
+    // toPrevTrack,
+    trackProgress,
+    trackIndex,
+    onSearch,
+    onSearchEnd,
+    onVolume,
+  ] = useAudio();
   const minSec = (secs) => {
     const minutes = Math.floor(secs / 60);
     const returnMin = minutes < 10 ? `0${minutes}` : minutes;
@@ -34,6 +34,12 @@ function AudioPlayer() {
 
     return `${returnMin}: ${returnSec}`;
   };
+
+
+  const onChange = (time) => {
+    onSearch(time);
+  }
+
 
   // const { resolveLink } = useIPFS();
   return (
@@ -50,9 +56,11 @@ function AudioPlayer() {
         <div>
           <div className="songTitle">
             {/* {JSON.parse(nftAlbum[trackIndex].metadata).name} */}
+            Ase Ola - Sola Allyson
           </div>
           <div className="songAlbum">
             {/* {nftAlbum[trackIndex].name} */}
+            Imisi
             </div>
         </div>
       </div>
@@ -62,33 +70,33 @@ function AudioPlayer() {
           // onClick={toPrevTrack}
            />
           {
-          // isPlaying ?
+          isPlaying ?
            (
             <PauseCircleFilled className="pausePlay" 
-            // onClick={toggle} 
+            onClick={toggle} 
             />
           ) 
-          // : (
-          //   <PlayCircleFilled className="pausePlay" onClick={toggle} />
-          // )
+          : (
+            <PlayCircleFilled className="pausePlay" onClick={toggle} />
+          )
           }
           <StepForwardOutlined className="forback" 
           // onClick={toNextTrack} 
           />
         </div>
         <div className="buttons">
-          {/* {minSec(trackProgress)} */}
+          {minSec(trackProgress)}
           <Slider
-            value={5}
+            value={trackProgress}
             step={1}
             min={0}
-            max={0}
+            max={Math.round(duration)}
             className="progress"
             tooltipVisible={false}
-            // onChange={(value) => onSearch(value)}
-            // onAfterChange={onSearchEnd}
+            onChange={onChange}
+            onAfterChange={onSearchEnd}
           />
-          {/* {duration ? minSec(Math.round(duration)) : "00:00"} */}
+          {duration ? minSec(Math.round(duration)) : "00:00"}
         </div>
       </div>
       <div className="soundDiv">
@@ -97,7 +105,7 @@ function AudioPlayer() {
           className="volume"
           defaultValue={100}
           tooltipVisible={false}
-          // onChange={(value) => onVolume(value/100)}
+          onChange={(value) => onVolume(value/100)}
         />
       </div>
     </>

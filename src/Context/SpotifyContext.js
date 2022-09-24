@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Web3 from "web3";
-import musicStoreJSON from "../contract_abi/MusicStore.json";
 import { toWei } from "../Utils/convert";
+import { musicweb3Contract } from "../Utils/musicStoreContract";
 
 export const SpotifyContext = React.createContext();
 
 export const SpotifyProvider = ({ children }) => {
-  const musicStoreABI = musicStoreJSON.abi;
   const [currentAccount, setCurrentAccount] = useState();
+  const [userDetails, setUserDetails] = useState([]);
+  const [allPublishedAlbums, setAllPublishedAlbums] = useState([])
   const [isLoading, setisLoading] = useState(false);
+  const [isBeingPlayed, setIsBeingPlayed] = useState(true);
   const [playlistCover, setPlaylistCover] = useState();
   const [playlistDetails, setPlaylistDetails] = useState({
     author: "",
@@ -26,9 +28,6 @@ export const SpotifyProvider = ({ children }) => {
     console.log(playlistDetails);
   };
 
-  var Contract = require("web3-eth-contract");
-  const web3 = window.web3;
-
   //Function to connect account
   const connectWallet = async () => {
     if (window.ethereum) {
@@ -45,16 +44,57 @@ export const SpotifyProvider = ({ children }) => {
     return false;
     // alert("Please Install Metamask");
   };
+   //Function to get the User details of the connected account
+   const getUserDetails = async (account) => {
+    if (!account) {
+      return [];
+    }
 
+    //Get the musicStore Contract
+    const musicStoreContract = await musicweb3Contract();
+    // console.log(musicStoreContract.methods);
+
+    //Get User Details from the blockchain
+    const userDetails = await musicStoreContract.methods
+      .getUserDetails(account)
+      .call((err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        console.log(result);
+      });
+    // console.log(await userDetails);
+    setUserDetails(userDetails);
+  };
+
+  //Function to get all albums
+  const getAllAlbums = async () => {
+    // Connect to the musicStore contract
+    const musicStoreContract = await musicweb3Contract();
+
+    //Get All albums that has been published via the smartcontract
+    const allAlbums = await musicStoreContract.methods.getAllAlbums().call();
+    setAllPublishedAlbums(allAlbums);
+    console.log(allAlbums);
+  };
+
+  //Fetch User details everytime the wallet address changes
+  useEffect(() => {
+    setisLoading(true);
+    getUserDetails(currentAccount);
+    setisLoading(false);
+  }, [currentAccount]);
+  
+  //Use Effect to call fetch all albums once
+  useEffect(() => {
+    getAllAlbums();
+  }, [])
+  
+  
   //Function to Upload Album
   const uploadAlbum = async () => {
-    await Contract.setProvider(
-      "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
-    );
-    const musicStoreContract = await new web3.eth.Contract(
-      musicStoreABI,
-      "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
-    );
+    //Get the musicStore Contract
+    const musicStoreContract = await musicweb3Contract();
 
     const allAlbums = musicStoreContract.methods
       .uploadAlbum(
@@ -75,38 +115,10 @@ export const SpotifyProvider = ({ children }) => {
     console.log(allAlbums);
   };
 
-  //Function to get the User details of the connected account
-  const getUserDetails = async () => {
-    await Contract.setProvider(
-      "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
-    );
-    const musicStoreContract = await new web3.eth.Contract(
-      musicStoreABI,
-      // "0xA844156Ba166535dD3ab29cA0fB93Ab48Dd6b953"
-      "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
-    );
-    // console.log(musicStoreContract.methods);
-    const userDetails = await musicStoreContract.methods
-      .getUserDetails(currentAccount)
-      .call((err, result) => {
-        if (err) {
-          console.log(err);
-        }
-        console.log(result);
-      });
-    console.log(await userDetails);
-  };
-
   //Function to get the permission to play an album
   const getPermissionToPlay = async () => {
-    await Contract.setProvider(
-      "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
-    );
-    const musicStoreContract = await new web3.eth.Contract(
-      musicStoreABI,
-      // "0xA844156Ba166535dD3ab29cA0fB93Ab48Dd6b953"
-      "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
-    );
+    // Connect to the musicStore contract
+    const musicStoreContract = await musicweb3Contract();
 
     await musicStoreContract.methods
       .play(1)
@@ -118,33 +130,14 @@ export const SpotifyProvider = ({ children }) => {
       });
   };
 
-  //Function to get all albums
-  const getAllAlbums = async () => {
-    await Contract.setProvider(
-      "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
-    );
-    const musicStoreContract = await new web3.eth.Contract(
-      musicStoreABI,
-      // "0xA844156Ba166535dD3ab29cA0fB93Ab48Dd6b953"
-      "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
-    );
-
-    const allAlbums = await musicStoreContract.methods.getAllAlbums().call();
-    console.log(allAlbums);
-  };
+  
 
   //Function for User to subscribe
   const userSubscribe = async () => {
-    await Contract.setProvider(
-      "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
-    );
-    const musicStoreContract = await new web3.eth.Contract(
-      musicStoreABI,
-      // "0xA844156Ba166535dD3ab29cA0fB93Ab48Dd6b953"
-      "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
-    );
+    // Connect to the musicStore contract
+    const musicStoreContract = await musicweb3Contract();
 
-    const allAlbums = await musicStoreContract.methods
+    const response = await musicStoreContract.methods
       .subscribe(3, currentAccount, toWei("100000000000000000"))
       .send({ from: currentAccount }, (err, result) => {
         if (err) {
@@ -152,19 +145,14 @@ export const SpotifyProvider = ({ children }) => {
         }
         console.log(result);
       });
-    console.log(allAlbums);
+     
+    console.log(response);
   };
 
   //Function to filter an album by category based on route
   const getCategory = async (category) => {
-    await Contract.setProvider(
-      "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
-    );
-    const musicStoreContract = await new web3.eth.Contract(
-      musicStoreABI,
-      // "0xA844156Ba166535dD3ab29cA0fB93Ab48Dd6b953"
-      "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
-    );
+    // Connect to the musicStore contract
+    const musicStoreContract = await musicweb3Contract();
 
     const allAlbums = await musicStoreContract.methods.getAllAlbums().call();
 
@@ -176,14 +164,8 @@ export const SpotifyProvider = ({ children }) => {
 
   //Function to get all published albums by a user
   const getUserAlbums = async (user) => {
-    await Contract.setProvider(
-      "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
-    );
-    const musicStoreContract = await new web3.eth.Contract(
-      musicStoreABI,
-      // "0xA844156Ba166535dD3ab29cA0fB93Ab48Dd6b953"
-      "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
-    );
+    // Connect to the musicStore contract
+    const musicStoreContract = await musicweb3Contract();
 
     await musicStoreContract.methods
       .getUserUploads(currentAccount)
@@ -197,14 +179,8 @@ export const SpotifyProvider = ({ children }) => {
 
   //Function to withdraw from the app
   const withdraw = async (user, amount) => {
-    await Contract.setProvider(
-      "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
-    );
-    const musicStoreContract = await new web3.eth.Contract(
-      musicStoreABI,
-      // "0xA844156Ba166535dD3ab29cA0fB93Ab48Dd6b953"
-      "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
-    );
+    // Connect to the musicStore contract
+    const musicStoreContract = await musicweb3Contract();
 
     await musicStoreContract.methods
       .withdraw(toWei("1000000000000000"))
@@ -235,6 +211,10 @@ export const SpotifyProvider = ({ children }) => {
         playlistDetails,
         setPlaylistDetails,
         handleChange,
+        isBeingPlayed,
+        setIsBeingPlayed,
+        userDetails,
+        allPublishedAlbums
       }}
     >
       {children}{" "}
@@ -243,15 +223,7 @@ export const SpotifyProvider = ({ children }) => {
 };
 
 /*
-Wrap this codes into a function that is usable on the frontend.
-The media array will be populated by an object containing the track image and track song for each track the author selects for each input on the frontend.
-Then we get the response.data and use it for the metadata to upload it on the blockchain from the frontend.
 
-Create context api with the web3js or etherjs api.
-create a connect button function that will only be connecting to the particular network we want to use it with.
-Create a user variable that keeps record of the connected user and is reusable on other pages.
-Create an isLoading function that will be true whenever we are communicating with the blockchain
-Create an upload function that will contain the functions described above.
 Create a play album function that must first get permission from the blockchain to play before playing it.
 Create a get all albums function that does not require a user to be connected before it can get it.
 Create a filter function that can filter the all albums array when a user wants albums from a category, this will make use of the route of the current page to do this

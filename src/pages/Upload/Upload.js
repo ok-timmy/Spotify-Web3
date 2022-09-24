@@ -5,6 +5,7 @@ import { SpotifyContext } from "../../Context/SpotifyContext";
 import { create } from "ipfs-http-client";
 import useIPFS from "../../hooks/useIPFS";
 import { v4 as uuidv4 } from "uuid";
+import LoadingOverlay from "../../components/LoadingOverlay/LoadingOverlay";
 //  require("dotenv-webpack");
 
 const projectId = "2EpAoml3QIi4f5tLxjsHGcHZwXr";
@@ -32,7 +33,7 @@ const Upload = () => {
     handleChange,
     playlistCover,
     setPlaylistCover,
-    // isLoading,
+    isLoading,
     setisLoading,
   } = useContext(SpotifyContext);
 
@@ -40,6 +41,7 @@ const Upload = () => {
   const [tArray, setTArray] = useState([
     {
       id: uuidv4(),
+      name: "",
       trackCover: [],
       trackFile: [],
     },
@@ -82,9 +84,7 @@ const Upload = () => {
     //Upload Album Cover and get IPFS Link
     try {
       client.add({ content: playlistCover }).then((res) => {
-        const imageurl = `https://infura-ipfs.io/ipfs/${res.path}`;
-        console.log(imageurl);
-        const imgIPFSLink = resolveLink(imageurl);
+        const imgIPFSLink = resolveLink(`https://infura-ipfs.io/ipfs/${res.path}`);
         console.log(imgIPFSLink);
         setPlaylistDetails((prev) => ({
           ...prev,
@@ -101,6 +101,7 @@ const Upload = () => {
     for (let i = 0; i < tArray.length; i++) {
       const eachTrack = tArray[i];
       let cont = {
+        trackName: eachTrack.name,
         coverLink: "",
         fileLink: "",
       };
@@ -133,6 +134,9 @@ const Upload = () => {
 
   console.log(playlistDetails);
   return (
+    <div className="relative">
+      
+    {isLoading && <LoadingOverlay/>}
     <div className="py-8 px-16 text-white">
       <div className="text-4xl font-semibold mb-8 text-center">
         Create Playlist{" "}
@@ -293,6 +297,8 @@ const Upload = () => {
           </div>
         </div>
       </form>
+    </div>
+
     </div>
   );
 };

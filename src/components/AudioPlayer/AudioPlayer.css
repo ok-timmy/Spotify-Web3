@@ -11,12 +11,12 @@
     justify-content: end;
   }
 
-.pauseplay {
+.pausePlay {
     font-size: 35px;
     transition: transform 0.2s;
 }
 
-.pauseplay:hover {
+.pausePlay:hover {
     transform: scale(1.1);
 }
 
@@ -38,15 +38,15 @@
 }
 
 .progress {
-    width:400px;
+    width:450px;
 }
 
 .progress .ant-slider-track {
-    background-color: #A7A7A7;
+    background-color: #a1a1a3;
 }
 
 .progress .ant-slider-handle {
-    background-color: transparent;
+    background-color: rgb(86, 225, 86);
 }
 
 .cover {

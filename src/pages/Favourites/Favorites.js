@@ -1,7 +1,18 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import AlbumCard from '../../components/AlbumCard/AlbumCard'
+import { SpotifyContext } from '../../Context/SpotifyContext';
 
 const Favorites = () => {
+  const { currentAccount} = useContext(SpotifyContext);
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    if (!currentAccount){
+       return navigate("/");
+    }
+ },[]);
+
   return (
     <div className="mt-2 px-6 pt-6">
         <div className="flex justify-between">

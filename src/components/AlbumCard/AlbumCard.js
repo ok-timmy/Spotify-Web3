@@ -1,7 +1,8 @@
 import { PlayCircleFilled } from "@ant-design/icons";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
-const AlbumCard = () => {
+const AlbumCard = ({id}) => {
   const [hover, setHover] = useState(false);
 
   const handleHover = () => {
@@ -10,6 +11,7 @@ const AlbumCard = () => {
   }
 
   return (
+    <Link to={`/albums/${2}`}>
     <div
       className=" py-4 px-4 flex flex-col h-72 w-56 rounded-md border border-white cursor-pointer bg-[] hover:bg-[#282828] hover:shadow-2xl"
       onMouseEnter={ handleHover}
@@ -31,6 +33,7 @@ const AlbumCard = () => {
         Harry Styles is on top of the top 50
       </div>
     </div>
+    </Link>
   );
 };
 
