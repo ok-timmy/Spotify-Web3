@@ -10,6 +10,7 @@ export const useAlbum = (contract) => {
   
   useEffect(() => {
     const fetchAlbum = async () => {
+      // deepcode ignore PromiseNotCaughtGeneral: <please specify a reason of ignoring this>
       return await token
         .getAllTokenIds({ address: contract, chain: "mumbai" })
         .then((result) => result);
@@ -19,6 +20,8 @@ export const useAlbum = (contract) => {
         fetchAlbum().then((song)=> {
             setAlbumDetails(song.result);
             console.log(song.result)
+        }).catch((error)=>{
+          console.log(error);
         })
     }
   }, [isInitialized, contract])

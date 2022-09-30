@@ -1,7 +1,7 @@
 import React from "react";
 // import { SpotifyContext } from "../../Context/SpotifyContext";
 
-const Track = ({ tArray, id, setTArray }) => {
+const Track = ({ tArray, id, setTArray, removeTrack }) => {
   // console.log(tArray);
 
   const num = tArray.findIndex((object) => {
