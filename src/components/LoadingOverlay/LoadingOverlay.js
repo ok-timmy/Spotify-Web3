@@ -1,6 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
+import { SpotifyContext } from "../../Context/SpotifyContext";
 
 const LoadingOverlay = () => {
+  const {
+    aboutToComplete,
+    setAboutToComplete,
+    uploadAlbum,
+    playlistDetails,
+  } = useContext(SpotifyContext);
+
+  const finish = () => {
+    uploadAlbum(playlistDetails);
+    console.log(playlistDetails);
+    setAboutToComplete(false);
+  };
+
   return (
     // <!-- loading overlay -->
 
@@ -28,8 +42,15 @@ const LoadingOverlay = () => {
           ></path>
         </svg>
         <span className="text-3xl mt-3">Loading..</span>
-        <span className="text-xl mt-3">This may take a few seconds, Please do not leave this page</span>
-        
+        <span className="text-xl mt-3">
+          This may take a few seconds, Please do not leave this page
+        </span>
+        {aboutToComplete ? (
+          <button onClick={finish}>Finish Now</button>
+        ) : (
+          <></>
+        )}
+
         {/* <!-- end loading icon --> */}
       </div>
     </div>

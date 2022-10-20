@@ -8,12 +8,13 @@ import musicStoreJSON from "../contract_abi/MusicStore.json";
 
  export const musicweb3Contract = async() => {
     await Contract.setProvider(
-        "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
+        // "https://rinkeby.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
+        "https://polygon-mumbai.infura.io/v3/9e1456b5bcab482c94916c854b7a0736"
       );
       const musicStoreContract = await new web3.eth.Contract(
         musicStoreABI,
-        // "0xA844156Ba166535dD3ab29cA0fB93Ab48Dd6b953"
-        "0x36A033f26b97bE9fAA4DD004C092f028ebF32aDc"
+         "0x8133D83fBa966e982ab4b0E154fA4BB7e09f3ca1"  //Polygon
+        // "0xaCA2672f59B48C862c2d4D8AD88FC5c5A969E43B"
       );
 
       return musicStoreContract;

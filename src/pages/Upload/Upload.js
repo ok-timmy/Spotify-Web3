@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import Track from "../../components/FormComponent/Track";
 import { Buffer } from "buffer";
 import { SpotifyContext } from "../../Context/SpotifyContext";
@@ -6,6 +6,7 @@ import { create } from "ipfs-http-client";
 import useIPFS from "../../hooks/useIPFS";
 import { v4 as uuidv4 } from "uuid";
 import LoadingOverlay from "../../components/LoadingOverlay/LoadingOverlay";
+import { PlusCircleOutlined } from "@ant-design/icons";
 //  require("dotenv-webpack");
 
 const projectId = "2EpAoml3QIi4f5tLxjsHGcHZwXr";
@@ -35,18 +36,15 @@ const Upload = () => {
     setPlaylistCover,
     isLoading,
     setisLoading,
+    currentAccount,
+    tArray,
+    setTArray,
+    setAboutToComplete
   } = useContext(SpotifyContext);
 
   const { resolveLink } = useIPFS();
-  const [tArray, setTArray] = useState([
-    {
-      id: uuidv4(),
-      name: "",
-      trackCover: [],
-      trackFile: [],
-    },
-  ]);
 
+  //Add More track details forms to the upload playlist form
   const handleAddMore = () => {
     if (tArray.length < 20) {
       const newId = uuidv4();
@@ -66,9 +64,11 @@ const Upload = () => {
     const newTrackArrays = tArray.filter((newTArrays) => {
       return newTArrays.id !== trackId;
     });
+    console.log(newTrackArrays);
     setTArray(newTrackArrays);
   };
 
+  //Capture Image selected for playlist cover
   const captureFile = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
@@ -80,9 +80,7 @@ const Upload = () => {
     };
   };
 
-  const submitPlaylist = async (e) => {
-    e.preventDefault();
-    setisLoading(true);
+  const loadPlaylistToIPFS = async () => {
     console.log(playlistDetails);
 
     //Upload Album Cover and get IPFS Link
@@ -105,6 +103,8 @@ const Upload = () => {
     } catch (error) {
       console.log(error);
     }
+
+    console.log(playlistDetails);
 
     //Upload each track and track cover on IPFS and get link
 
@@ -135,18 +135,35 @@ const Upload = () => {
       }
     }
 
+    console.log(arrayStringify)
     setPlaylistDetails((prev) => ({
       ...prev,
-      tracks: JSON.stringify(arrayStringify),
+      tracks: [JSON.stringify(arrayStringify)],
     }));
-
-    setisLoading(false);
+    console.log("Finished executing");
+   console.log(playlistDetails)
   };
 
   console.log(playlistDetails);
+
+  
+  const uploadPlaylistToBlockchain = async (e) => {
+    e.preventDefault();
+    if(!currentAccount){
+      alert("Please Connect Your Wallet!!");
+      return;
+    } else {
+      setisLoading(true);
+    await loadPlaylistToIPFS();
+    setAboutToComplete(true);
+    }
+  }
+
+ 
   return (
-    <div className="relative">
+    <>
       {isLoading && <LoadingOverlay />}
+    <div className="relative">
       <div className="py-8 px-16 text-white">
         <div className="text-4xl font-semibold mb-8 text-center">
           Create Playlist{" "}
@@ -162,16 +179,17 @@ const Upload = () => {
                   className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
                   htmlFor="inline-full-name"
                 >
-                  Author's Name
+                 Playlist Title
                 </label>
               </div>
               <div className="md:w-2/3">
                 <input
                   className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white "
                   type="text"
-                  name="author"
+                  name="title"
+                  maxLength={32}
                   required={true}
-                  value={playlistDetails.author}
+                  value={playlistDetails.title}
                   onChange={(e) => {
                     handleChange(e);
                   }}
@@ -187,16 +205,16 @@ const Upload = () => {
                   className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
                   htmlFor="Album-Title"
                 >
-                  Playlist Title
+                  Description
                 </label>
               </div>
               <div className="md:w-2/3">
                 <input
                   className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white"
                   type="text"
-                  name="title"
+                  name="description"
                   required={true}
-                  value={playlistDetails.title}
+                  value={playlistDetails.description}
                   onChange={(e) => {
                     handleChange(e);
                   }}
@@ -272,23 +290,17 @@ const Upload = () => {
 
             {/* Release Date of Album or Playlist */}
 
-            <div className="text-center">Upload Tracks</div>
+            <div className="text-center my-12 text-3xl">Upload Tracks</div>
             {tArray.map(({ id }) => {
               return (
                 <Track key={id} id={id} tArray={tArray} setTArray={setTArray} removeTrack={removeTrack}/>
               );
             })}
 
-            <div className="md:flex md:items-center">
-              <div className="md:w-1/3"></div>
-              <div className="md:w-2/3 flex justify-end mt-3">
-                <button
-                  className="shadow bg-gray-700 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-                  type="button"
-                  onClick={handleAddMore}
-                >
-                  Add More Tracks
-                </button>
+            <div className="md:flex md:items-center justify-center">
+              {/* <div className="md:w-1/3"></div> */}
+              <div className=" flex justify-start mt-6">
+              <PlusCircleOutlined onClick={handleAddMore} style={{color: " rgb(22 163 74)"}}  className="hover:scale-110 text-3xl "/>
               </div>
             </div>
 
@@ -299,7 +311,7 @@ const Upload = () => {
                 <button
                   className="shadow bg-gray-700 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
                   type="submit"
-                  onClick={(e) => submitPlaylist(e)}
+                  onClick={(e) => uploadPlaylistToBlockchain(e)}
                 >
                   Upload Playlist
                 </button>
@@ -309,6 +321,7 @@ const Upload = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 

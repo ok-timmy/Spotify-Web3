@@ -29,9 +29,9 @@ describe("Should Deploy the Contract", () => {
         await musicStore
           .connect(user1)
           .uploadPlaylist(
-            "First Playlist",
-            "Sungba",
-            "Hip-Hop",
+            ethers.utils.formatBytes32String("First Playlist"),
+            ethers.utils.formatBytes32String("Sungba"),
+            ethers.utils.formatBytes32String("Hip-Hop"),
             ["Track 1", "Track 2", "Track 3", "Track 4", "Track 5"],
             "Cover_Image.png",
             200000000
@@ -40,9 +40,9 @@ describe("Should Deploy the Contract", () => {
 
       const albumOne = await musicStore.playlists(1);
       expect(albumOne.author).equal(user1.address);
-      expect(albumOne.title).equal("First Playlist");
-      expect(albumOne.name).equal("Sungba");
-      expect(albumOne.genre).equal("Hip-Hop");
+      expect(ethers.utils.parseBytes32String(albumOne.title)).equal("First Playlist");
+      expect(ethers.utils.parseBytes32String(albumOne.description)).equal("Sungba");
+      expect(ethers.utils.parseBytes32String(albumOne.genre)).equal("Hip-Hop");
       expect(albumOne.ratings).equal(0);
     });
     // Test For Playlist creation with User 2
@@ -51,9 +51,9 @@ describe("Should Deploy the Contract", () => {
         await musicStore
           .connect(user2)
           .uploadPlaylist(
-            "First Playlist",
-            "Sweet Songs",
-            "Mood",
+            ethers.utils.formatBytes32String("First Playlist"),
+            ethers.utils.formatBytes32String("Sweet Songs"),
+            ethers.utils.formatBytes32String("Mood"),
             ["Song 1", "Song 2", "Song 3", "Song 4", "Song 5"],
             "Cover_Image.png",
             1000000000
@@ -66,9 +66,9 @@ describe("Should Deploy the Contract", () => {
         await musicStore
           .connect(user3)
           .uploadPlaylist(
-            "My First Playlist",
-            "Idupe",
-            "Gospel",
+            ethers.utils.formatBytes32String("My First Playlist"),
+            ethers.utils.formatBytes32String("Idupe"),
+            ethers.utils.formatBytes32String("Gospel"),
             ["Ebe", "Iri", "Idupe", "Asise", "Mimo"],
             "Cover_Image.png",
             45000000000
@@ -81,9 +81,9 @@ describe("Should Deploy the Contract", () => {
         await musicStore
           .connect(user1)
           .uploadPlaylist(
-            "Second Playlist",
-            "Nzaza",
-            "Jazz",
+            ethers.utils.formatBytes32String("Second Playlist"),
+            ethers.utils.formatBytes32String("Nzaza"),
+            ethers.utils.formatBytes32String("Jazz"),
             ["Nzaza", "Sungba", "Adisa", "Bandana", "PBUY"],
             "Cover_Image.png",
             45000000000
@@ -96,9 +96,9 @@ describe("Should Deploy the Contract", () => {
       await musicStore
         .connect(user1)
         .uploadPlaylist(
-          "First Playlist",
-          "Sungba",
-          "Hip-Hop",
+          ethers.utils.formatBytes32String("First Playlist"),
+          ethers.utils.formatBytes32String("Sungba"),
+          ethers.utils.formatBytes32String("Hip-Hop"),
           ["Track 1", "Track 2", "Track 3", "Track 4", "Track 5"],
           "Cover_Image.png",
           200000000
@@ -108,9 +108,9 @@ describe("Should Deploy the Contract", () => {
       await musicStore
         .connect(user2)
         .uploadPlaylist(
-          "First Playlist",
-          "Sweet Songs",
-          "Mood",
+          ethers.utils.formatBytes32String("First Playlist"),
+          ethers.utils.formatBytes32String("Sweet Songs"),
+          ethers.utils.formatBytes32String("Mood"),
           ["Song 1", "Song 2", "Song 3", "Song 4", "Song 5"],
           "Cover_Image.png",
           1000000000
@@ -120,9 +120,9 @@ describe("Should Deploy the Contract", () => {
       await musicStore
         .connect(user3)
         .uploadPlaylist(
-          "My First Playlist",
-          "Idupe",
-          "Gospel",
+          ethers.utils.formatBytes32String("My First Playlist"),
+          ethers.utils.formatBytes32String("Idupe"),
+          ethers.utils.formatBytes32String("Gospel"),
           ["Ebe", "Iri", "Idupe", "Asise", "Mimo"],
           "Cover_Image.png",
           45000000000
@@ -132,9 +132,9 @@ describe("Should Deploy the Contract", () => {
       await musicStore
         .connect(user1)
         .uploadPlaylist(
-          "Second Playlist",
-          "Nzaza",
-          "Jazz",
+          ethers.utils.formatBytes32String("Second Playlist"),
+          ethers.utils.formatBytes32String("Nzaza"),
+          ethers.utils.formatBytes32String("Jazz"),
           ["Nzaza", "Sungba", "Adisa", "Bandana", "PBUY"],
           "Cover_Image.png",
           45000000000
@@ -193,9 +193,9 @@ describe("Should Deploy the Contract", () => {
       await musicStore
         .connect(user1)
         .uploadPlaylist(
-          "First Playlist",
-          "Sungba",
-          "Hip-Hop",
+          ethers.utils.formatBytes32String("First Playlist"),
+          ethers.utils.formatBytes32String("Sungba"),
+          ethers.utils.formatBytes32String("Hip-Hop"),
           ["Track 1", "Track 2", "Track 3", "Track 4", "Track 5"],
           "Cover_Image.png",
           200000000
@@ -205,9 +205,9 @@ describe("Should Deploy the Contract", () => {
       await musicStore
         .connect(user2)
         .uploadPlaylist(
-          "First Playlist",
-          "Sweet Songs",
-          "Mood",
+          ethers.utils.formatBytes32String("First Playlist"),
+          ethers.utils.formatBytes32String("Sweet Songs"),
+          ethers.utils.formatBytes32String("Mood"),
           ["Song 1", "Song 2", "Song 3", "Song 4", "Song 5"],
           "Cover_Image.png",
           1000000000
@@ -217,9 +217,9 @@ describe("Should Deploy the Contract", () => {
       await musicStore
         .connect(user3)
         .uploadPlaylist(
-          "My First Playlist",
-          "Idupe",
-          "Gospel",
+          ethers.utils.formatBytes32String("My First Playlist"),
+          ethers.utils.formatBytes32String("Idupe"),
+          ethers.utils.formatBytes32String("Gospel"),
           ["Ebe", "Iri", "Idupe", "Asise", "Mimo"],
           "Cover_Image.png",
           45000000000
@@ -229,9 +229,9 @@ describe("Should Deploy the Contract", () => {
       await musicStore
         .connect(user1)
         .uploadPlaylist(
-          "Second Playlist",
-          "Nzaza",
-          "Jazz",
+          ethers.utils.formatBytes32String("Second Playlist"),
+          ethers.utils.formatBytes32String("Nzaza"),
+          ethers.utils.formatBytes32String("Jazz"),
           ["Nzaza", "Sungba", "Adisa", "Bandana", "PBUY"],
           "Cover_Image.png",
           45000000000

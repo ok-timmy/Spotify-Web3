@@ -56,7 +56,7 @@ const Earnings = () => {
           <div className="bg-black rounded-lg shadow-xl w-auto text-white text-center py-4 px-4">
             <div className="text-2xl mb-6">No Of Playable Albums Left</div>
             <div className="text-white text-2xl">
-              {userDetails.length !== 0 && userDetails.playableAlbums}
+              {userDetails.length !== 0 && userDetails.playablePlaylists}
             </div>
           </div>
         </div>
@@ -68,7 +68,7 @@ const Earnings = () => {
           <div className="bg-black rounded-lg shadow-xl w-auto text-white text-center py-4 px-4">
             <div className="text-2xl mb-6">No Of Uploaded Works</div>
             <div className="text-2xl">
-              {userDetails.length !== 0 && userDetails.uploadedAlbums.length}
+              {userDetails.length !== 0 && userDetails.uploadedPlaylists.length}
             </div>
           </div>
         </div>

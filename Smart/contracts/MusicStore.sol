@@ -4,6 +4,8 @@ pragma solidity >0.7.0 <=0.9.0;
 
 import "./IERC20.sol";
 
+// import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
 contract MusicStore {
     address owner;
     uint playlistCount;
@@ -11,10 +13,12 @@ contract MusicStore {
     uint uploadCost = 0;
     IERC20 token;
 
-    // constructor(address _owner) {
-    //     // owner = 0xcF9Ab7DBED8d5D104167012C91a4Fb0b7504cd2B;
-    //     owner = _owner;
-    // }
+    constructor() {
+        owner = 0xcF9Ab7DBED8d5D104167012C91a4Fb0b7504cd2B;
+        // token = IERC20(_token);
+        token = IERC20(0x2d7882beDcbfDDce29Ba99965dd3cdF7fcB10A1e);
+        // owner = _owner;
+    }
 
     mapping(address => User) public users;
     mapping(uint => Collection) public playlists;
@@ -24,9 +28,9 @@ contract MusicStore {
     struct Collection {
         address author;
         uint id;
-        string title;
-        string name;
-        string genre;
+        bytes32 title;
+        string description;
+        bytes32 genre;
         string[] tracks;
         string coverImage;
         uint releaseDate;
@@ -47,9 +51,9 @@ contract MusicStore {
     event Subscribed(address subscriber, uint price, uint plan);
     event Uploaded(
         address author,
-        string title,
-        string name,
-        string genre,
+        bytes32 title,
+        string description,
+        bytes32 genre,
         string[] tracks,
         string coverImage,
         uint releaseDate
@@ -57,7 +61,7 @@ contract MusicStore {
     event Played(
         uint id,
         address Author,
-        string playlistTitle,
+        bytes32 playlistTitle,
         uint releaseDate,
         uint noOfStreams
     );
@@ -66,31 +70,44 @@ contract MusicStore {
 
     function subscribe(
         uint plan,
-        address _user,
+        address payable _user,
         // IERC20 _token,
         uint price
-    ) public returns (bool success) {
+    ) public payable returns (bool success) {
+        require(_user == msg.sender);
         User storage user = users[_user];
-        // _token.transferFrom(msg.sender, address(this), price);
         if (plan == 1) {
-            user.playablePlaylists += 50;
-            // _token.transferFrom(address(this), owner, price / 11);
+            // require(token.allowance(msg.sender, address(this)) > 0);
+            // price = token.allowance(msg.sender, address(this));
+            // require(token.transferFrom(msg.sender, address(this), price));
+            // _user.transfer(price);
+
+            token.transferFrom( _user, address(this), (price / 11));
+            user.playablePlaylists += 100;
             user.isSubscribed = true;
 
             emit Subscribed(_user, price, plan);
             return true;
         }
         if (plan == 2) {
-            user.playablePlaylists += 100;
-            // _token.transferFrom(address(this), owner, price / 11);
+            // require(token.allowance(msg.sender, address(this)) > 0);
+            // price = token.allowance(msg.sender, address(this));
+            // require(token.transferFrom(msg.sender, address(this), price));
+            // _user.transfer(price);
+            token.transferFrom( _user, address(this), (price / 11));
+            user.playablePlaylists += 200;
             user.isSubscribed = true;
 
             emit Subscribed(_user, price, plan);
             return true;
         }
         if (plan == 3) {
-            user.playablePlaylists += 200;
-            // _token.transferFrom(address(this), owner, price / 11);
+            // require(token.allowance(msg.sender, address(this)) > 0);
+            // price = token.allowance(msg.sender, address(this));
+            // require(token.transferFrom(msg.sender, address(this), price));
+            // _user.transfer(price);
+            token.transferFrom( _user, address(this), (price / 11));
+            user.playablePlaylists += 300;
             user.isSubscribed = true;
 
             emit Subscribed(_user, price, plan);
@@ -104,7 +121,7 @@ contract MusicStore {
             "You Do Not have an active subscription to play album, Please Subscribe"
         );
         playlists[_id].noOfStreams += 1;
-        users[playlists[_id].author].amountEarned += 100000000000000000;
+        users[playlists[_id].author].amountEarned += 1000000000000000; //15 zeros
         emit Played(
             _id,
             playlists[_id].author,
@@ -120,20 +137,19 @@ contract MusicStore {
     }
 
     function uploadPlaylist(
-        // address _author,
-        string memory _title,
-        string memory _name,
-        string memory _genre,
+        bytes32 _title,
+        string memory _description,
+        bytes32 _genre,
         string[] memory _tracks,
         string memory _coverImage,
         uint _releaseDate
-    ) public payable {
+    ) public payable returns(bool success) {
         playlistCount++;
         Collection memory newCollection = Collection(
             msg.sender,
             playlistCount,
             _title,
-            _name,
+            _description,
             _genre,
             _tracks,
             _coverImage,
@@ -148,18 +164,16 @@ contract MusicStore {
         emit Uploaded(
             msg.sender,
             _title,
-            _name,
+            _description,
             _genre,
             _tracks,
             _coverImage,
             _releaseDate
         );
+        return true;
     }
 
-    function withdraw(
-        // IERC20 _token,
-        uint _amount
-    ) public payable {
+    function withdraw(uint _amount) public payable {
         require(
             users[msg.sender].amountEarned > 0,
             "You Do not have enough balance to withdraw from"
@@ -168,7 +182,7 @@ contract MusicStore {
             users[msg.sender].amountEarned > _amount,
             "Insuficient Balance"
         );
-        // _token.transferFrom(address(this), _user, _amount);
+        token.transferFrom(address(this), msg.sender, _amount);
         users[msg.sender].amountEarned -= _amount;
         emit Withdrawn(_amount, msg.sender, users[msg.sender].amountEarned);
     }
@@ -197,7 +211,7 @@ contract MusicStore {
         User storage user = users[_user];
         Collection storage collection = playlists[_playlistId];
 
-        for (uint i = 0; i < user.ratedPlaylists.length; i++) {
+        for (uint i = 0; i < user.ratedPlaylists.length; ) {
             if (user.ratedPlaylists[i] == playlists[_playlistId].id) {
                 revert("Album Has been Rated already");
             } else {
@@ -209,15 +223,21 @@ contract MusicStore {
                 }
                 collection.ratings = sum / ratings[_playlistId].length;
             }
+            unchecked {
+                ++i;
+            }
         }
     }
 
     function likePlaylist(uint _playlistId) public {
         User storage user = users[msg.sender];
 
-        for (uint i = 0; i < user.likedPlaylists.length; i++) {
+        for (uint i = 0; i < user.likedPlaylists.length; ) {
             if (user.likedPlaylists[i] == playlists[_playlistId].id) {
                 revert("Album Has been liked already");
+            }
+            unchecked {
+                ++i;
             }
             user.likedPlaylists.push(_playlistId);
         }
@@ -231,9 +251,12 @@ contract MusicStore {
         // Collection storage collection = playlists[_playlistId];
         User storage user = users[_user];
 
-        for (uint i = 0; i < user.likedPlaylists.length; i++) {
+        for (uint i = 0; i < user.likedPlaylists.length; ) {
             if (user.likedPlaylists[i] == playlists[_playlistId].id) {
                 return true;
+            }
+            unchecked {
+                ++i;
             }
         }
 
@@ -262,7 +285,7 @@ contract MusicStore {
     //   to my wallet
     //5. - Uploading playlist should be in this format
     // - {
-    //     title, name, Category(Album/Playlist), genre(hip-hop, gospel, R&B, Jazz, Rap, Soul, Country Music, Electronic, Blues, Afro, Mixed ), Songs(- Should be an array
+    //     title, description, Category(Album/Playlist), genre(hip-hop, gospel, R&B, Jazz, Rap, Soul, Country Music, Electronic, Blues, Afro, Mixed ), Songs(- Should be an array
     //     - Should only accept .mp3, .aac), Album/Playlist cover image, Author of playlist/ Album, Release date, Rating, number of Plays,
     // - }
 

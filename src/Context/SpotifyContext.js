@@ -1,24 +1,36 @@
 import React, { useEffect, useState } from "react";
 import Web3 from "web3";
-import { toWei } from "../Utils/convert";
+import { toBytes, toWei } from "../Utils/convert";
 import { musicweb3Contract } from "../Utils/musicStoreContract";
+import { v4 as uuidv4 } from "uuid";
 
 export const SpotifyContext = React.createContext();
 
 export const SpotifyProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState();
   const [userDetails, setUserDetails] = useState([]);
-  const [allPublishedAlbums, setAllPublishedAlbums] = useState([])
+  const [allPublishedAlbums, setAllPublishedAlbums] = useState([]);
   const [isLoading, setisLoading] = useState(false);
+  const [aboutToComplete, setAboutToComplete] = useState(false);
   const [isBeingPlayed, setIsBeingPlayed] = useState(true);
   const [playlistCover, setPlaylistCover] = useState();
   const [playlistDetails, setPlaylistDetails] = useState({
-    author: "",
     title: "",
+    description: "",
     genre: "general",
     cover: "",
-    tracks: "",
+    tracks: [],
   });
+  const [tArray, setTArray] = useState([
+    {
+      id: uuidv4(),
+      name: "",
+      trackCover: [],
+      trackFile: [],
+    },
+  ]);
+
+  console.log(allPublishedAlbums);
 
   const handleChange = (e) => {
     setPlaylistDetails((prevState) => ({
@@ -44,8 +56,9 @@ export const SpotifyProvider = ({ children }) => {
     return false;
     // alert("Please Install Metamask");
   };
-   //Function to get the User details of the connected account
-   const getUserDetails = async (account) => {
+
+  //Function to get the User details of the connected account
+  const getUserDetails = async (account) => {
     if (!account) {
       return [];
     }
@@ -55,27 +68,28 @@ export const SpotifyProvider = ({ children }) => {
     // console.log(musicStoreContract.methods);
 
     //Get User Details from the blockchain
-    const userDetails = await musicStoreContract.methods
+    const userDetail = await musicStoreContract.methods
       .getUserDetails(account)
       .call((err, result) => {
         if (err) {
           console.log(err);
         }
         console.log(result);
+        setUserDetails(result);
       });
     // console.log(await userDetails);
-    setUserDetails(userDetails);
+    setUserDetails(userDetail);
   };
 
   //Function to get all albums
-  const getAllAlbums = async () => {
+  const getAllPlaylists = async () => {
     // Connect to the musicStore contract
     const musicStoreContract = await musicweb3Contract();
 
     //Get All albums that has been published via the smartcontract
-    const allAlbums = await musicStoreContract.methods.getAllAlbums().call();
+    const allAlbums = await musicStoreContract.methods.getAllPlaylists().call();
     setAllPublishedAlbums(allAlbums);
-    console.log(allAlbums);
+    // console.log(allAlbums);
   };
 
   //Fetch User details everytime the wallet address changes
@@ -84,34 +98,41 @@ export const SpotifyProvider = ({ children }) => {
     getUserDetails(currentAccount);
     setisLoading(false);
   }, [currentAccount]);
-  
+
   //Use Effect to call fetch all albums once
   useEffect(() => {
-    getAllAlbums();
-  }, [])
-  
-  
+    getAllPlaylists();
+  }, []);
+
   //Function to Upload Album
-  const uploadAlbum = async () => {
+  const uploadAlbum = async (playlist) => {
     //Get the musicStore Contract
+    console.log(playlist.tracks);
+    console.log(playlist.cover);
     const musicStoreContract = await musicweb3Contract();
 
     const allAlbums = musicStoreContract.methods
-      .uploadAlbum(
-        "First Album",
-        "Sungba",
-        "Album",
-        "Hip-Hop",
-        ["Track 1", "Track 2", "Track 3", "Track 4", "Track 5"],
-        "Cover_Image.png",
-        200000000
+      .uploadPlaylist(
+        toBytes(playlist.title),
+        playlist.description,
+        toBytes(playlist.genre),
+        playlist.tracks,
+        playlist.cover,
+        new Date().getTime()
       )
       .send({ from: currentAccount }, (err, result) => {
         if (err) {
           console.log(err);
         }
         console.log(result);
-      });
+      })
+      .then((e) => {
+        console.log(e);
+
+        alert("Playlist Uploaded Successfully!!");
+        setisLoading(false);
+      })
+      .catch((err) => console.log(err));
     console.log(allAlbums);
   };
 
@@ -126,11 +147,10 @@ export const SpotifyProvider = ({ children }) => {
         if (err) {
           console.log(err);
         }
+        getUserDetails(currentAccount);
         console.log(result);
       });
   };
-
-  
 
   //Function for User to subscribe
   const userSubscribe = async () => {
@@ -138,14 +158,14 @@ export const SpotifyProvider = ({ children }) => {
     const musicStoreContract = await musicweb3Contract();
 
     const response = await musicStoreContract.methods
-      .subscribe(3, currentAccount, toWei("100000000000000000"))
+      .subscribe(1, currentAccount, toWei("11"))
       .send({ from: currentAccount }, (err, result) => {
         if (err) {
           console.log(err);
         }
         console.log(result);
       });
-     
+
     console.log(response);
   };
 
@@ -199,7 +219,7 @@ export const SpotifyProvider = ({ children }) => {
         currentAccount,
         connectWallet,
         getUserDetails,
-        getAllAlbums,
+        getAllPlaylists,
         userSubscribe,
         uploadAlbum,
         getUserAlbums,
@@ -208,13 +228,18 @@ export const SpotifyProvider = ({ children }) => {
         getCategory,
         playlistCover,
         setPlaylistCover,
+        setisLoading,
         playlistDetails,
         setPlaylistDetails,
         handleChange,
         isBeingPlayed,
         setIsBeingPlayed,
         userDetails,
-        allPublishedAlbums
+        allPublishedAlbums,
+        tArray,
+        setTArray,
+        aboutToComplete,
+        setAboutToComplete,
       }}
     >
       {children}{" "}

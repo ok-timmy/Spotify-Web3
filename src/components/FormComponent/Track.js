@@ -1,5 +1,5 @@
+import { DeleteOutlined } from "@ant-design/icons";
 import React from "react";
-// import { SpotifyContext } from "../../Context/SpotifyContext";
 
 const Track = ({ tArray, id, setTArray, removeTrack }) => {
   // console.log(tArray);
@@ -33,15 +33,24 @@ const Track = ({ tArray, id, setTArray, removeTrack }) => {
   // console.log(num);
 
   return (
-    <div className="flex flex-col border-b border-white">
-      <div>Track {num + 1}</div>
+    <div className="flex flex-col border-b border-white relative pt-6">
+      <div className="absolute left-0 top-24">
+        <DeleteOutlined
+          className="hover:scale-110 text-3xl"
+          style={{color: "rgb(220 38 38)"}}
+          onClick={() => {
+            removeTrack(id);
+          }}
+        />
+      </div>
+      <div className="text-xl">{num + 1}.</div>
 
       {/* Track Name */}
 
       <div className="md:flex md:items-center md:max-w-full mb-6">
         <div className="md:w-1/3">
           <label
-            className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
+            className="block text-gray-400 font-bold md:text-right mb-1 md:mb-0 pr-4"
             htmlFor="inline-full-name"
           >
             Track Name
@@ -56,9 +65,11 @@ const Track = ({ tArray, id, setTArray, removeTrack }) => {
             required={true}
             value={tArray.name}
             onChange={(e) => {
-              setTArray((prev) => ({
-                ...prev,
-                name: e.target.value,
+              setTArray((prev) =>  prev.map((obj) => {
+                if (obj.id === id) {
+                  return { ...obj, name: e.target.value }
+                }
+                return obj;
               }));
             }}
           />
@@ -67,7 +78,7 @@ const Track = ({ tArray, id, setTArray, removeTrack }) => {
       <div className="flex justify-start md:items-center md:max-w-full mb-3">
         <div className="md:w-1/3">
           <label
-            className="block mb-2 pb-6 text-sm text-gray-500 font-bold md:text-right md:mb-0 pr-4"
+            className="block mb-2 pb-6 text-sm text-gray-400 font-bold md:text-right md:mb-0 pr-4"
             htmlFor="file_input"
           >
             Track {num + 1}
@@ -82,13 +93,14 @@ const Track = ({ tArray, id, setTArray, removeTrack }) => {
             type="file"
             name="trackFile"
             accept=".mp3, .ogg"
+            required={true}
             onChange={(e) => handleChange(e)}
           />
           <div
-            className="mt-1 text-sm text-gray-500 dark:text-gray-300"
+            className="mt-1 text-sm text-gray-400 dark:text-gray-300"
             id="file_input_help"
           >
-            SVG, PNG, JPG or GIF (MAX. 800x400px).
+            MP3 and OGG .
           </div>
         </div>
       </div>
@@ -96,7 +108,7 @@ const Track = ({ tArray, id, setTArray, removeTrack }) => {
       <div className="flex justify-start md:items-center md:max-w-full mb-6">
         <div className="md:w-1/3">
           <label
-            className="block mb-2 pb-6 text-sm text-gray-500 font-bold md:text-right md:mb-0 pr-4"
+            className="block mb-2 pb-6 text-sm text-gray-400 font-bold md:text-right md:mb-0 pr-4"
             htmlFor="file_input"
           >
             Track {num + 1} Image
@@ -114,7 +126,7 @@ const Track = ({ tArray, id, setTArray, removeTrack }) => {
             onChange={(e) => handleChange(e)}
           />
           <div
-            className="mt-1 text-sm text-gray-500 dark:text-gray-300"
+            className="mt-1 text-sm text-gray-400 dark:text-gray-300"
             id="file_input_help"
           >
             SVG, PNG, JPG or GIF (MAX. 800x400px).
