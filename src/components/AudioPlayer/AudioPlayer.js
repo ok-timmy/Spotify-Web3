@@ -12,20 +12,20 @@ import useAudio from "../../hooks/useAudio";
 import { Slider } from "antd";
 import { SafetyCertificateFilled } from "@ant-design/icons";
 
-function AudioPlayer() {
+function AudioPlayer({albumList}) {
   const
  [
     isPlaying,
     duration,
     toggle,
-    // toNextTrack,
-    // toPrevTrack,
+    toNextTrack,
+    toPrevTrack,
     trackProgress,
     trackIndex,
     onSearch,
     onSearchEnd,
     onVolume,
-  ] = useAudio();
+  ] = useAudio(albumList);
   const minSec = (secs) => {
     const minutes = Math.floor(secs / 60);
     const returnMin = minutes < 10 ? `0${minutes}` : minutes;
@@ -40,6 +40,8 @@ function AudioPlayer() {
     onSearch(time);
   }
 
+  const fullAlbumArray = JSON.parse(albumList);
+  console.log(fullAlbumArray[0].trackName);
 
   // const { resolveLink } = useIPFS();
   return (
@@ -56,18 +58,19 @@ function AudioPlayer() {
         <div>
           <div className="songTitle">
             {/* {JSON.parse(nftAlbum[trackIndex].metadata).name} */}
-            Ase Ola - Sola Allyson
+            {/* Ase Ola - Sola Allyson */}
+            {!fullAlbumArray?.length > 0 ? fullAlbumArray[trackIndex].trackName : "Name"}
           </div>
           <div className="songAlbum">
-            {/* {nftAlbum[trackIndex].name} */}
-            Imisi
+            {/* Imisi */}
+            {/* {fullAlbumArray[trackIndex].trackName} */}
             </div>
         </div>
       </div>
       <div>
         <div className="buttons">
           <StepBackwardOutlined className="forback" 
-          // onClick={toPrevTrack}
+          onClick={()=>toPrevTrack}
            />
           {
           isPlaying ?
@@ -81,7 +84,7 @@ function AudioPlayer() {
           )
           }
           <StepForwardOutlined className="forback" 
-          // onClick={toNextTrack} 
+          onClick={()=>toNextTrack} 
           />
         </div>
         <div className="buttons">

@@ -7,14 +7,6 @@ module.exports = {
   defaultNetwork: "polygon",
   networks: {
      hardhat: {},
-     rinkeby: {
-        url: `${process.env.NODE_RINKEBY_URL}`,
-        accounts: [`${process.env.PRIVATE_KEY}`]
-     },
-     ropsten: {
-        url: `${process.env.NODE_ROPSTEN_URL}`,
-        accounts: [`${process.env.PRIVATE_KEY}`]
-      },
       polygon: {
         url : ` ${process.env.NODE_POLYGON_URL}`,
         accounts: [`${process.env.PRIVATE_KEY}`]

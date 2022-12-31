@@ -12,7 +12,8 @@ export const SpotifyProvider = ({ children }) => {
   const [allPublishedAlbums, setAllPublishedAlbums] = useState([]);
   const [isLoading, setisLoading] = useState(false);
   const [aboutToComplete, setAboutToComplete] = useState(false);
-  const [isBeingPlayed, setIsBeingPlayed] = useState(true);
+  const [isBeingPlayed, setIsBeingPlayed] = useState(false);
+  const [albumBeingPlayed, setAlbumBeingPlayed] = useState([]);
   const [playlistCover, setPlaylistCover] = useState();
   const [playlistDetails, setPlaylistDetails] = useState({
     title: "",
@@ -137,6 +138,7 @@ export const SpotifyProvider = ({ children }) => {
   };
 
   //Function to get the permission to play an album
+  //Put the album Id in the function
   const getPermissionToPlay = async () => {
     // Connect to the musicStore contract
     const musicStoreContract = await musicweb3Contract();
@@ -146,8 +148,10 @@ export const SpotifyProvider = ({ children }) => {
       .send({ from: currentAccount }, (err, result) => {
         if (err) {
           console.log(err);
+        }else {
+          getUserDetails(currentAccount);
+          setIsBeingPlayed(true);
         }
-        getUserDetails(currentAccount);
         console.log(result);
       });
   };
@@ -158,7 +162,7 @@ export const SpotifyProvider = ({ children }) => {
     const musicStoreContract = await musicweb3Contract();
 
     const response = await musicStoreContract.methods
-      .subscribe(1, currentAccount, toWei("11"))
+      .subscribe(1, currentAccount, toWei("1"))
       .send({ from: currentAccount }, (err, result) => {
         if (err) {
           console.log(err);
@@ -240,6 +244,8 @@ export const SpotifyProvider = ({ children }) => {
         setTArray,
         aboutToComplete,
         setAboutToComplete,
+        albumBeingPlayed,
+        setAlbumBeingPlayed,
       }}
     >
       {children}{" "}

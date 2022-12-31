@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   PlayCircleFilled,
   HeartOutlined,
   EllipsisOutlined,
   ClockCircleOutlined,
+  PauseCircleFilled,
+  StopFilled,
 } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
+import { SpotifyContext } from "../../Context/SpotifyContext";
 const Album = () => {
   const location = useLocation();
   const { albumList, genre, imageUrl, albumTitle, albumDescription } =
@@ -13,11 +16,23 @@ const Album = () => {
   const tracks = JSON.parse(albumList);
 
   // console.log(location.state);
+  console.log(albumList);
+
+  const {
+    isBeingPlayed,
+    setIsBeingPlayed,
+    setAlbumBeingPlayed,
+    albumBeingPlayed
+  } = useContext(SpotifyContext);
+
+  console.log(albumBeingPlayed);
 
   return (
     <div>
       <div className="flex flex-col">
-        <div className="bg-[url(https://c4.wallpaperflare.com/wallpaper/493/874/387/nicki-minaj-wallpaper-preview.jpg)] bg-no-repeat bg-cover px-8 h-[20rem] object-fill">
+        <div
+          className={`bg-[url(https://c4.wallpaperflare.com/wallpaper/493/874/387/nicki-minaj-wallpaper-preview.jpg)] bg-no-repeat bg-cover px-8 h-[20rem] object-fill`}
+        >
           <div className="flex flex-col content-end h-64">
             <div className="text-white text-lg font-bold">PLAYLIST</div>
             <div className="text-white text-7xl font-bold"> {albumTitle}</div>
@@ -47,7 +62,20 @@ const Album = () => {
           <div className="flex justify-start items-center pb-4 px-8">
             <div className="w-44 flex justify-between content-center">
               <div className=" text-white text-[3.5rem] z-50 hover:scale-110 hover:cursor-default">
-                <PlayCircleFilled style={{ color: "#1FDF64" }} />
+                {isBeingPlayed ? (
+                  <StopFilled
+                    style={{ color: "#1FDF64" }}
+                    onClick={() => setIsBeingPlayed(!isBeingPlayed)}
+                  />
+                ) : (
+                  <PlayCircleFilled
+                    style={{ color: "#1FDF64" }}
+                    onClick={() => {
+                      setIsBeingPlayed(!isBeingPlayed);
+                      setAlbumBeingPlayed(albumList);
+                    }}
+                  />
+                )}
               </div>
               <div className=" text-white text-[2rem] pt-6 hover:cursor-pointer">
                 <HeartOutlined

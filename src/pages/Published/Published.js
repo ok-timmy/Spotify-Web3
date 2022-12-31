@@ -6,7 +6,7 @@ import { toString } from '../../Utils/convert'
 
 const Published = () => {
   const {userDetails, isLoading, currentAccount} = useContext(SpotifyContext)
-  console.log(userDetails.uploadedAlbums)
+  console.log(userDetails)
 
   let navigate = useNavigate();
 

@@ -13,8 +13,9 @@ import musicStoreJSON from "../contract_abi/MusicStore.json";
       );
       const musicStoreContract = await new web3.eth.Contract(
         musicStoreABI,
-         "0x8133D83fBa966e982ab4b0E154fA4BB7e09f3ca1"  //Polygon
-        // "0xaCA2672f59B48C862c2d4D8AD88FC5c5A969E43B"
+        "0x5F1FB2Ea9eBCddffFFF6CFD1a560b9325cBE9C0A"
+        // "0xAE6b08da0fa2273c502bDc8a23d39Aee8992B8a4"     // Polygon
+        //  "0x2c59F8582cfDf4cb227507044FA9a6009C1AB57F"  //Polygon
       );
 
       return musicStoreContract;

@@ -12,13 +12,13 @@ import SideNav from "./components/SideNav/SideNav";
 import Earnings from "./pages/Earnings/Earnings";
 import Library from "./pages/Library/Library";
 import Album from "./pages/Album/Album";
-// import AudioPlayer from "./components/AudioPlayer/AudioPlayer";
-// import { SpotifyContext } from "./Context/SpotifyContext";
+import AudioPlayer from "./components/AudioPlayer/AudioPlayer";
+import { SpotifyContext } from "./Context/SpotifyContext";
 
 const { Footer, Content } = Layout;
 
 const App = () => {
-  // const { isBeingPlayed } = useContext(SpotifyContext);
+  const { isBeingPlayed, albumBeingPlayed } = useContext(SpotifyContext);
   return (
     <Layout>
       <Layout style={{ display: "flex" }}>
@@ -41,7 +41,7 @@ const App = () => {
         </Content>
       </Layout>
       <Footer className="footer">
-        {/* {isBeingPlayed && <AudioPlayer  />} */}
+        {isBeingPlayed && <AudioPlayer albumList={albumBeingPlayed} />}
       </Footer>
     </Layout>
   );

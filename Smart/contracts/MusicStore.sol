@@ -16,7 +16,7 @@ contract MusicStore {
     constructor() {
         owner = 0xcF9Ab7DBED8d5D104167012C91a4Fb0b7504cd2B;
         // token = IERC20(_token);
-        token = IERC20(0x2d7882beDcbfDDce29Ba99965dd3cdF7fcB10A1e);
+        // token = IERC20(0x2d7882beDcbfDDce29Ba99965dd3cdF7fcB10A1e);
         // owner = _owner;
     }
 
@@ -82,7 +82,7 @@ contract MusicStore {
             // require(token.transferFrom(msg.sender, address(this), price));
             // _user.transfer(price);
 
-            token.transferFrom( _user, address(this), (price / 11));
+            payable(address(this)).transfer((price / 11));
             user.playablePlaylists += 100;
             user.isSubscribed = true;
 
@@ -94,7 +94,8 @@ contract MusicStore {
             // price = token.allowance(msg.sender, address(this));
             // require(token.transferFrom(msg.sender, address(this), price));
             // _user.transfer(price);
-            token.transferFrom( _user, address(this), (price / 11));
+
+            payable(address(this)).transfer((price / 11));
             user.playablePlaylists += 200;
             user.isSubscribed = true;
 
@@ -106,7 +107,8 @@ contract MusicStore {
             // price = token.allowance(msg.sender, address(this));
             // require(token.transferFrom(msg.sender, address(this), price));
             // _user.transfer(price);
-            token.transferFrom( _user, address(this), (price / 11));
+            payable(address(this)).transfer((price / 11));
+            // token.transferFrom( _user, address(this), (price / 11));
             user.playablePlaylists += 300;
             user.isSubscribed = true;
 
@@ -262,6 +264,15 @@ contract MusicStore {
 
         return false;
     }
+
+
+       // Function to receive Ether. msg.data must be empty
+       receive() external payable {}
+
+       // Fallback function is called when msg.data is not empty
+       fallback() external payable {}
+
+
 
     // URGENT TODOS
     /*
