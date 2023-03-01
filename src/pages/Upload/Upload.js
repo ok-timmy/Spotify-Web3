@@ -7,6 +7,7 @@ import useIPFS from "../../hooks/useIPFS";
 import { v4 as uuidv4 } from "uuid";
 import LoadingOverlay from "../../components/LoadingOverlay/LoadingOverlay";
 import { PlusCircleOutlined } from "@ant-design/icons";
+// const {create} = require('ipfs-http-client');
 //  require("dotenv-webpack");
 
 const projectId = "2EpAoml3QIi4f5tLxjsHGcHZwXr";

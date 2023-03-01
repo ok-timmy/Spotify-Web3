@@ -57,13 +57,13 @@ function AudioPlayer({albumList}) {
         /> */}
         <div>
           <div className="songTitle">
-            {/* {JSON.parse(nftAlbum[trackIndex].metadata).name} */}
-            {/* Ase Ola - Sola Allyson */}
+            {/* {JSON.parse(nftAlbum[trackIndex].metadata).name}
+            Ase Ola - Sola Allyson */}
             {!fullAlbumArray?.length > 0 ? fullAlbumArray[trackIndex].trackName : "Name"}
           </div>
           <div className="songAlbum">
-            {/* Imisi */}
-            {/* {fullAlbumArray[trackIndex].trackName} */}
+            Imisi
+            {fullAlbumArray[trackIndex].trackName}
             </div>
         </div>
       </div>
