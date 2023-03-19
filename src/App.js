@@ -18,7 +18,7 @@ import { SpotifyContext } from "./Context/SpotifyContext";
 const { Footer, Content } = Layout;
 
 const App = () => {
-  const { isBeingPlayed, albumBeingPlayed } = useContext(SpotifyContext);
+  const { isBeingPlayed, albumBeingPlayed, albumTitleBeingPlayed } = useContext(SpotifyContext);
   return (
     <Layout>
       <Layout style={{ display: "flex" }}>
@@ -41,7 +41,7 @@ const App = () => {
         </Content>
       </Layout>
       <Footer className="footer">
-        {isBeingPlayed && <AudioPlayer albumList={albumBeingPlayed} />}
+        {isBeingPlayed && <AudioPlayer albumList={albumBeingPlayed} albumTitle={albumTitleBeingPlayed}/>}
       </Footer>
     </Layout>
   );

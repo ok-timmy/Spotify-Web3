@@ -47,7 +47,7 @@ const Home = () => {
                   imageUrl={album.coverImage}
                   albumTitle={toString(album.title)}
                   albumDescription={album.description}
-                  albumList={album.tracks[0]}
+                  albumList={album.tracks}
                   genre={toString(album.genre)}
                 />
               </div>

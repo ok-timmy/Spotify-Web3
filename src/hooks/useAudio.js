@@ -1,5 +1,5 @@
-import useIPFS  from "./useIPFS";
-import  { useState, useEffect, useRef } from "react";
+import useIPFS from "./useIPFS";
+import { useState, useEffect, useRef } from "react";
 
 const useAudio = (fullAlbum) => {
   const { resolveLink } = useIPFS();
@@ -11,11 +11,12 @@ const useAudio = (fullAlbum) => {
   const [volume, setVolume] = useState(1);
   const fullAlbumArray = JSON.parse(fullAlbum);
 
+  // console.log(fullAlbumArray[trackIndex])
+
   const AudioRef = useRef(
     // new Audio(resolveLink(JSON.parse(audio[trackIndex].metadata).animation_url))
     new Audio(fullAlbumArray[trackIndex].fileLink)
-    );
-    // new Audio("https://ipfs.io/ipfs/QmXsrWkYN2eWaspsVGPgr85c7RsHTS85PZ7ZHkaVanoEV6?filename=Sola_Allyson_-_Ase_Ola.mp3")
+  );
 
   const intervalRef = useRef();
   const isReady = useRef(false);
@@ -24,26 +25,34 @@ const useAudio = (fullAlbum) => {
 
   const toPrevTrack = () => {
     if (trackIndex - 1 < 0) {
-      setTrackIndex(fullAlbum.length - 1);
-    } else setTrackIndex(trackIndex - 1);
+      setTrackIndex(fullAlbumArray.length - 1);
+      AudioRef.current.load();
+      AudioRef.current = new Audio(
+        fullAlbumArray[fullAlbumArray.length - 1].fileLink
+      );
+    } else {
+      setTrackIndex(trackIndex - 1);
+      AudioRef.current.load();
+      AudioRef.current = new Audio(
+        fullAlbumArray[trackIndex - 1].fileLink
+      );
+    }
   };
   const toNextTrack = () => {
-    if (trackIndex < fullAlbum.length - 1) {
+    if (trackIndex < fullAlbumArray.length - 1) {
       setTrackIndex(trackIndex + 1);
-    } else setTrackIndex(0);
+      AudioRef.current.load();
+      AudioRef.current = new Audio(
+        fullAlbumArray[trackIndex + 1].fileLink
+      );
+    } else {
+      AudioRef.current.load();
+      AudioRef.current = new Audio(fullAlbumArray[0].fileLink);
+      setTrackIndex(0);
+    }
   };
 
   const toggle = () => setIsPlaying(!isPlaying);
-
-  // useEffect(() => {
-  //   toggle();
-  //   setAudio(nftAlbum);
-  //   if (trackIndex === 0) {
-  //     setNewSong(newSong + 1);
-  //   } else {
-  //     setTrackIndex(0);
-  //   }
-  // }, [nftAlbum]);
 
   const startTimer = () => {
     clearInterval(intervalRef.current);
@@ -121,7 +130,7 @@ const useAudio = (fullAlbum) => {
     onSearchEnd,
     onVolume,
     toNextTrack,
-    toPrevTrack
+    toPrevTrack,
   ];
 };
 

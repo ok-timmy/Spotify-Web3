@@ -16,13 +16,15 @@ const Album = () => {
   const tracks = JSON.parse(albumList);
 
   // console.log(location.state);
-  console.log(albumList);
+  console.log(tracks);
 
   const {
     isBeingPlayed,
     setIsBeingPlayed,
     setAlbumBeingPlayed,
-    albumBeingPlayed
+    albumBeingPlayed,
+    albumTitleBeingPlayed,
+    setAlbumTitleBeingPlayed,
   } = useContext(SpotifyContext);
 
   console.log(albumBeingPlayed);
@@ -71,8 +73,9 @@ const Album = () => {
                   <PlayCircleFilled
                     style={{ color: "#1FDF64" }}
                     onClick={() => {
-                      setIsBeingPlayed(!isBeingPlayed);
                       setAlbumBeingPlayed(albumList);
+                      setAlbumTitleBeingPlayed(albumTitle)
+                      setIsBeingPlayed(!isBeingPlayed);
                     }}
                   />
                 )}
