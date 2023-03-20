@@ -204,12 +204,12 @@ export const SpotifyProvider = ({ children }) => {
   };
 
   //Function to withdraw from the app
-  const withdraw = async (user, amount) => {
+  const withdraw = async (amount) => {
     // Connect to the musicStore contract
     const musicStoreContract = await musicweb3Contract();
 
     await musicStoreContract.methods
-      .withdraw(toWei("1000000000000000"))
+      .withdraw(toWei(String(1000000000000000 * amount)))
       .send({ from: currentAccount }, (err, result) => {
         if (err) {
           console.log(err);

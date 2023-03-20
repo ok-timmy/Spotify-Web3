@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { toString } from "../../Utils/convert";
 
 const Home = () => {
-  const {  getPermissionToPlay, withdraw, allPublishedAlbums } =
+  const { getPermissionToPlay, allPublishedAlbums } =
     useContext(SpotifyContext);
   let navigate = useNavigate();
 
@@ -17,9 +17,6 @@ const Home = () => {
         onClick={getPermissionToPlay}
       >
         Play Album
-      </button>
-      <button className="bg-white text-black ml-4 px-3 py-3" onClick={withdraw}>
-        Withdraw
       </button>
       <div className="mt-2 px-6 pt-6">
         <div className="flex justify-between">
@@ -42,7 +39,7 @@ const Home = () => {
                   albumDescription={album.description}
                   albumList={album.tracks}
                   genre={toString(album.genre)}
-                  dateAdded = {Number(album.releaseDate)}
+                  dateAdded={Number(album.releaseDate)}
                 />
               </div>
             );
