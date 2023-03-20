@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-// import { Link } from "react-router-dom";
 import "./Home.css";
 import AlbumCard from "../../components/AlbumCard/AlbumCard";
 import { SpotifyContext } from "../../Context/SpotifyContext";
@@ -7,18 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { toString } from "../../Utils/convert";
 
 const Home = () => {
-  const { userSubscribe, getPermissionToPlay, withdraw, allPublishedAlbums } =
+  const {  getPermissionToPlay, withdraw, allPublishedAlbums } =
     useContext(SpotifyContext);
   let navigate = useNavigate();
 
   return (
     <>
-      <button
-        className="bg-white text-black ml-4 px-3 py-3"
-        onClick={userSubscribe}
-      >
-        User Subscribe
-      </button>
       <button
         className="bg-white text-black ml-4 px-3 py-3"
         onClick={getPermissionToPlay}

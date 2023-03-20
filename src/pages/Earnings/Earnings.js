@@ -3,23 +3,33 @@ import React, { useContext, useEffect } from "react";
 import { SpotifyContext } from "../../Context/SpotifyContext";
 import { fromWei } from "../../Utils/convert";
 import { useNavigate } from "react-router-dom";
+import Subscribe from "../../components/Subscribe/Subscribe";
 
 const Earnings = () => {
-  const { currentAccount,  userDetails, isLoading } = useContext(SpotifyContext);
+  const {
+    currentAccount,
+    userDetails,
+    isLoading,
+    openSubscribeDialog,
+    setOpenSubscribeDialog,
+  } = useContext(SpotifyContext);
   let navigate = useNavigate();
 
+  console.log(openSubscribeDialog);
+
   useEffect(() => {
-    if (!currentAccount){
-       return navigate("/");
+    if (!currentAccount) {
+      return navigate("/");
     }
- },[]);
+  }, []);
 
   if (isLoading) {
     return <div>Loading......</div>;
   }
 
   return (
-    <div className="">
+    <div className="relative">
+      {openSubscribeDialog && <div className="fixed"><Subscribe/></div>}
       <div className="flex flex-col px-4 py-4">
         <div className="bg-black rounded-2xl shadow-lg w-auto text-white px-8 py-4">
           {" "}
@@ -38,7 +48,8 @@ const Earnings = () => {
               }}
             />
             <span className="text-2xl">
-              {userDetails.length !== 0 && fromWei(String(userDetails.amountEarned))}
+              {userDetails.length !== 0 &&
+                fromWei(String(userDetails.amountEarned))}
             </span>{" "}
           </div>
         </div>
@@ -50,8 +61,18 @@ const Earnings = () => {
                 userDetails.isSubscribed ? "text-green-600" : "text-red-500"
               } text-2xl`}
             >
-              {userDetails.length !== 0 && userDetails.isSubscribed ? "Yes" : "No"}
+              {userDetails.length !== 0 && userDetails.isSubscribed
+                ? "Yes"
+                : "No"}
             </div>
+            {userDetails.length !== 0 && !userDetails.isSubscribed && (
+              <button
+                className="bg-green-600 mt-4 px-4 py-1 rounded-md text-lg hover:bg-green-900"
+                onClick={() => setOpenSubscribeDialog(true)}
+              >
+                Subscribe
+              </button>
+            )}
           </div>
           <div className="bg-black rounded-lg shadow-xl w-auto text-white text-center py-4 px-4">
             <div className="text-2xl mb-6">No Of Playable Albums Left</div>

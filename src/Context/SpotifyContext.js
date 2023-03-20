@@ -15,6 +15,7 @@ export const SpotifyProvider = ({ children }) => {
   const [isBeingPlayed, setIsBeingPlayed] = useState(false);
   const [albumBeingPlayed, setAlbumBeingPlayed] = useState([]);
   const [albumTitleBeingPlayed, setAlbumTitleBeingPlayed] = useState("");
+  const [openSubscribeDialog, setOpenSubscribeDialog] = useState(false);
   const [playlistCover, setPlaylistCover] = useState();
   const [playlistDetails, setPlaylistDetails] = useState({
     title: "",
@@ -158,12 +159,12 @@ export const SpotifyProvider = ({ children }) => {
   };
 
   //Function for User to subscribe
-  const userSubscribe = async () => {
+  const userSubscribe = async (id) => {
     // Connect to the musicStore contract
     const musicStoreContract = await musicweb3Contract();
 
     const response = await musicStoreContract.methods
-      .subscribe(1, currentAccount, toWei("1"))
+      .subscribe(id, currentAccount, toWei(String(id)))
       .send({ from: currentAccount }, (err, result) => {
         if (err) {
           console.log(err);
@@ -249,6 +250,8 @@ export const SpotifyProvider = ({ children }) => {
         setAlbumBeingPlayed,
         albumTitleBeingPlayed,
         setAlbumTitleBeingPlayed,
+        openSubscribeDialog,
+        setOpenSubscribeDialog,
       }}
     >
       {children}{" "}
