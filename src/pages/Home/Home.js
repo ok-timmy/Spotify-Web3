@@ -49,6 +49,7 @@ const Home = () => {
                   albumDescription={album.description}
                   albumList={album.tracks}
                   genre={toString(album.genre)}
+                  dateAdded = {Number(album.releaseDate)}
                 />
               </div>
             );

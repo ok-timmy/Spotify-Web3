@@ -1,20 +1,13 @@
-import useIPFS from "./useIPFS";
 import { useState, useEffect, useRef } from "react";
 
 const useAudio = (fullAlbum) => {
-  const { resolveLink } = useIPFS();
-  // const [audio, setAudio] = useState(nftAlbum);
   const [trackIndex, setTrackIndex] = useState(0);
-  const [newSong, setNewSong] = useState(0);
   const [trackProgress, setTrackProgress] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1);
   const fullAlbumArray = JSON.parse(fullAlbum);
 
-  // console.log(fullAlbumArray[trackIndex])
-
   const AudioRef = useRef(
-    // new Audio(resolveLink(JSON.parse(audio[trackIndex].metadata).animation_url))
     new Audio(fullAlbumArray[trackIndex].fileLink)
   );
 
@@ -58,7 +51,7 @@ const useAudio = (fullAlbum) => {
     clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
       if (AudioRef.current.ended) {
-        // toNextTrack();
+        toNextTrack();
       } else {
         setTrackProgress(Math.round(AudioRef.current.currentTime));
       }
@@ -83,10 +76,6 @@ const useAudio = (fullAlbum) => {
   }, []);
 
   useEffect(() => {
-    // AudioRef.current.pause();
-    // AudioRef.current = new Audio(
-    //   resolveLink(JSON.parse(audio[trackIndex].metadata).animation_url)
-    // );
     AudioRef.current.volume = volume;
     setTrackProgress(Math.round(AudioRef.current.currentTime));
     if (isReady.current) {
@@ -99,13 +88,10 @@ const useAudio = (fullAlbum) => {
   }, [trackIndex]);
 
   const onSearch = (value) => {
-    // console.log(intervalRef.current);
     clearInterval(intervalRef.current);
-    // console.log(value);
     intervalRef.current = value;
     AudioRef.current.currentTime = value;
     setTrackProgress(AudioRef.current.currentTime);
-    // console.log(intervalRef.current)
   };
 
   const onSearchEnd = () => {

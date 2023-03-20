@@ -4,36 +4,37 @@ import {
   HeartOutlined,
   EllipsisOutlined,
   ClockCircleOutlined,
-  PauseCircleFilled,
-  StopFilled,
+  BorderOutlined,
 } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 import { SpotifyContext } from "../../Context/SpotifyContext";
+import { convertDate } from "../../Utils/convertDate";
 const Album = () => {
   const location = useLocation();
-  const { albumList, genre, imageUrl, albumTitle, albumDescription } =
+  const { albumList, genre, imageUrl, albumTitle, albumDescription, dateAdded } =
     location.state;
   const tracks = JSON.parse(albumList);
 
-  // console.log(location.state);
+  console.log(albumTitle);
   console.log(tracks);
 
   const {
     isBeingPlayed,
     setIsBeingPlayed,
     setAlbumBeingPlayed,
-    albumBeingPlayed,
-    albumTitleBeingPlayed,
     setAlbumTitleBeingPlayed,
   } = useContext(SpotifyContext);
 
-  console.log(albumBeingPlayed);
+  console.log(imageUrl);
+  const bgImage = `url(https://c4.wallpaperflare.com/wallpaper/493/874/387/nicki-minaj-wallpaper-preview.jpg)`
+
+  console.log(bgImage)
 
   return (
     <div>
       <div className="flex flex-col">
         <div
-          className={`bg-[url(https://c4.wallpaperflare.com/wallpaper/493/874/387/nicki-minaj-wallpaper-preview.jpg)] bg-no-repeat bg-cover px-8 h-[20rem] object-fill`}
+          className={`bg-[${bgImage}] bg-no-repeat bg-cover px-8 h-[20rem] object-fill`}
         >
           <div className="flex flex-col content-end h-64">
             <div className="text-white text-lg font-bold">PLAYLIST</div>
@@ -65,7 +66,7 @@ const Album = () => {
             <div className="w-44 flex justify-between content-center">
               <div className=" text-white text-[3.5rem] z-50 hover:scale-110 hover:cursor-default">
                 {isBeingPlayed ? (
-                  <StopFilled
+                  <BorderOutlined
                     style={{ color: "#1FDF64" }}
                     onClick={() => setIsBeingPlayed(!isBeingPlayed)}
                   />
@@ -127,84 +128,13 @@ const Album = () => {
                       >
                         {track.trackName}
                       </th>
-                      <td className="py-4 px-6">Sliver</td>
-                      <td className="py-4 px-6">Laptop</td>
+                      <td className="py-4 px-6">{albumTitle}</td>
+                      <td className="py-4 px-6">{convertDate(dateAdded)}</td>
                       <td className="py-4 px-6">3:22</td>
                     </tr>
                   );
                 })}
-                {/* <tr className=" text-gray-400 bg-transparent border-gray-700 hover:bg-gray-700 ">
-                  <td className="p-4 w-4">0</td>
-                  <th
-                    scope="row"
-                    className="py-4 px-1 font-medium text-gray-200  whitespace-nowrap "
-                  >
-                    Apple MacBook Pro 17
-                  </th>
-                  <td className="py-4 px-6">Sliver</td>
-                  <td className="py-4 px-6">Laptop</td>
-                  <td className="py-4 px-6">3:22</td>
-                </tr>
-                <tr className="bg-transparent hover:bg-gray-700 hover:rounded-md ">
-                  <td className="p-4 w-4">1</td>
-                  <th
-                    scope="row"
-                    className="py-4 px-1font-medium text-gray-200 whitespace-nowrap "
-                  >
-                    Microsoft Surface Pro
-                  </th>
-                  <td className="py-4 px-6">White</td>
-                  <td className="py-4 px-6">Laptop PC</td>
-                  <td className="py-4 px-6">3:47</td>
-                </tr>
-                <tr className="bg-transparent hover:bg-gray-700">
-                  <td className="p-4 w-4">2</td>
-                  <th
-                    scope="row"
-                    className="py-4 px-1 font-medium text-gray-200 whitespace-nowrap"
-                  >
-                    Magic Mouse 2
-                  </th>
-                  <td className="py-4 px-6">Black</td>
-                  <td className="py-4 px-6">Accessories</td>
-                  <td className="py-4 px-6">3:05</td>
-                </tr>
-                <tr className="bg-transparent  hover:bg-gray-700">
-                  <td className="p-4 w-4">3</td>
-                  <th
-                    scope="row"
-                    className="py-4 px-1 font-medium text-gray-200 whitespace-nowrap "
-                  >
-                    Apple Watch
-                  </th>
-                  <td className="py-4 px-6">Silver</td>
-                  <td className="py-4 px-6">Accessories</td>
-                  <td className="py-4 px-6">2:15</td>
-                </tr>
-                <tr className="bg-transparent  ">
-                  <td className="p-4 w-4">4</td>
-                  <th
-                    scope="row"
-                    className="py-4 px-1 font-medium text-gray-200 whitespace-nowrap"
-                  >
-                    iPad
-                  </th>
-                  <td className="py-4 px-6">Gold</td>
-                  <td className="py-4 px-6">Tablet</td>
-                  <td className="py-4 px-6">4:00</td>
-                </tr>
-                <tr className="bg-transparent hover:bg-gray-700">
-                  <td className="p-4 w-4">5</td>
-                  <th
-                    scope="row"
-                    className="py-4 px-1 font-medium text-gray-200 whitespace-nowrap"
-                  >
-                    Apple iMac 27"
-                  </th>
-                  <td className="py-4 px-6">Silver</td>
-                  <td className="py-4 px-6">PC Desktop</td>
-                  <td className="py-4 px-6">2:45</td>
-                </tr> */}
+               
               </tbody>
             </table>
           </div>
