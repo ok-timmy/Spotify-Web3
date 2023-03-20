@@ -11,7 +11,7 @@ const AlbumCard = ({ id, imageUrl, albumTitle, albumDescription, albumList, genr
   };
 
   return (
-    <Link to={`/albums/${id}`} state={{albumList,  genre, imageUrl, albumTitle, albumDescription, dateAdded }}>
+    <Link to={`/albums/${id}`} state={{id, albumList,  genre, imageUrl, albumTitle, albumDescription, dateAdded }}>
       <div
         className=" py-4 px-4 flex flex-col h-72 w-56 rounded-md border border-white cursor-pointer bg-[] hover:bg-[#282828] hover:shadow-2xl"
         onMouseEnter={handleHover}

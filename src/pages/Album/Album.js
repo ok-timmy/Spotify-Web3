@@ -11,7 +11,7 @@ import { SpotifyContext } from "../../Context/SpotifyContext";
 import { convertDate } from "../../Utils/convertDate";
 const Album = () => {
   const location = useLocation();
-  const { albumList, genre, imageUrl, albumTitle, albumDescription, dateAdded } =
+  const {id, albumList, genre, imageUrl, albumTitle, albumDescription, dateAdded } =
     location.state;
   const tracks = JSON.parse(albumList);
 
@@ -19,6 +19,7 @@ const Album = () => {
   console.log(tracks);
 
   const {
+    getPermissionToPlay,
     isBeingPlayed,
     setIsBeingPlayed,
     setAlbumBeingPlayed,
@@ -68,7 +69,12 @@ const Album = () => {
                 {isBeingPlayed ? (
                   <BorderOutlined
                     style={{ color: "#1FDF64" }}
-                    onClick={() => setIsBeingPlayed(!isBeingPlayed)}
+                    onClick={async() =>{ 
+                    const response =  await getPermissionToPlay(id);
+                    //Work on fixing the blockchain first and have it fixed before completing this function.
+                    console.log(response);
+                      setIsBeingPlayed(!isBeingPlayed)
+                    }}
                   />
                 ) : (
                   <PlayCircleFilled
