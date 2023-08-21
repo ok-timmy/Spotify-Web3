@@ -61,7 +61,7 @@ const Library = () => {
             : "Spotify Top Playlists"}
         </h2>
       </div>
-      <div className=" pb-14 pt-2 grid grid-cols-4 gap-x-8 gap-y-8 text-white">
+      <div className=" pb-14 pt-2 grid gap-y-4 justify-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-x-4 xl:gap-x-8 text-white">
         {query !== null ? (
           sortedAlbums.map((album) => {
             return (

@@ -9,14 +9,15 @@ import {
 import { useLocation } from "react-router-dom";
 import { SpotifyContext } from "../../Context/SpotifyContext";
 import { convertDate } from "../../Utils/convertDate";
+import useAudioTime from "../../hooks/useAudioTime";
 const Album = () => {
   const location = useLocation();
   const {id, albumList, genre, imageUrl, albumTitle, albumDescription, dateAdded } =
     location.state;
   const tracks = JSON.parse(albumList);
 
-  console.log(albumTitle);
-  console.log(tracks);
+  // console.log(albumTitle);
+  // console.log(tracks);
 
   const {
     getPermissionToPlay,
@@ -26,10 +27,14 @@ const Album = () => {
     setAlbumTitleBeingPlayed,
   } = useContext(SpotifyContext);
 
-  console.log(imageUrl);
+  const {timesArray} = useAudioTime(albumList);
+  console.log(timesArray[0].duration, "data2")
+  console.log(isNaN(timesArray[0].duration))
+
+  // console.log(imageUrl);
   const bgImage = `url(https://c4.wallpaperflare.com/wallpaper/493/874/387/nicki-minaj-wallpaper-preview.jpg)`
 
-  console.log(bgImage)
+  // console.log(bgImage)
 
   return (
     <div>
@@ -37,8 +42,8 @@ const Album = () => {
         <div
           className={`bg-[${bgImage}] bg-no-repeat bg-cover px-8 h-[20rem] object-fill`}
         >
-          <div className="flex flex-col content-end h-64">
-            <div className="text-white text-lg font-bold">PLAYLIST</div>
+          <div className="flex flex-col justify-end lg:h-72 h-80">
+            <div className="text-white text-lg pb-8 font-bold">PLAYLIST</div>
             <div className="text-white text-7xl font-bold"> {albumTitle}</div>
             <div className="text-gray-300 text-lg font-semibold">
               {/* Music from Nicki Minaj, Kodak Black and EST Gee. */}
@@ -46,14 +51,14 @@ const Album = () => {
             </div>
             <div className="text-white">
               {" "}
-              <span>Spotify</span>{" "}
+              {/* <span>Spotify</span>{" "} */}
               <span>
                 {" "}
-                <ul className="inline-flex">
-                  <li className="px-1">{genre}</li>
-                  <li className="px-1">14,648,696 likes</li>
-                  <li>
-                    <span className="pl-1 font-bold">50 songs,</span> 2 hr 28
+                <ul className="flex flex-col lg:inline-flex lg:flex-row">
+                  <li className="lg:pr-2 pt-2">{genre}</li>
+                  <li className="lg:pr-2 pt-2">14,648,696 likes</li>
+                  <li className="pt-2">
+                    <span className="lg:pl-1 font-bold">50 songs,</span> 2 hr 28
                     min
                   </li>
                 </ul>
@@ -112,7 +117,7 @@ const Album = () => {
                   <th scope="col" className="py-3 px-6">
                     Album
                   </th>
-                  <th scope="col" className="py-3 px-6">
+                  <th scope="col" className="hidden lg:flex py-3 px-6">
                     Date Added
                   </th>
                   <th scope="col" className="py-3 px-6">
@@ -135,8 +140,8 @@ const Album = () => {
                         {track.trackName}
                       </th>
                       <td className="py-4 px-6">{albumTitle}</td>
-                      <td className="py-4 px-6">{convertDate(dateAdded)}</td>
-                      <td className="py-4 px-6">3:22</td>
+                      <td className="hidden lg:flex py-4 px-6">{convertDate(dateAdded)}</td>
+                      <td className="py-4 px-6">{(timesArray[0]?.duration)}</td>
                     </tr>
                   );
                 })}

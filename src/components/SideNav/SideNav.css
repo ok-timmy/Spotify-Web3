@@ -26,3 +26,23 @@
       font-size: 1.75rem;
       color: white;
     }
+
+    @media screen and (max-width:720px) {
+      .sideBar{
+        padding: 1.75rem 0.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .logo__div{
+        width: 100%;
+      }
+      .logo__div span {
+        display: none;
+        visibility: hidden;
+      }
+
+      .logo {
+        margin-right: 0;
+      }
+    }

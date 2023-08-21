@@ -28,7 +28,7 @@ const Home = () => {
             SEE ALL
           </span>
         </div>
-        <div className=" pb-14 pt-2 grid grid-cols-4 gap-x-8">
+        <div className=" pb-14 pt-2 grid gap-y-4 justify-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-x-4 xl:gap-x-8">
           {allPublishedAlbums.slice(0, 4).map((album) => {
             return (
               <div key={album.id}>
@@ -56,7 +56,7 @@ const Home = () => {
           </span>
         </div>
 
-        <div className=" pb-14 pt-2 grid grid-cols-4 gap-x-8">
+        <div className=" pb-14 pt-2 grid gap-y-4 justify-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-x-4 xl:gap-x-8">
           <AlbumCard />
           <AlbumCard />
           <AlbumCard />
@@ -73,7 +73,7 @@ const Home = () => {
           </span>
         </div>
 
-        <div className=" pb-14 pt-2 grid grid-cols-4 gap-x-8">
+        <div className=" pb-14 pt-2 grid gap-y-4 justify-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-x-4 xl:gap-x-8">
           <AlbumCard />
           <AlbumCard />
           <AlbumCard />
